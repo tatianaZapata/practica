@@ -39,8 +39,6 @@ pipeline {
 		stage('Unit Tests') {
 			steps {
 				echo "------------>Unit Tests<------------"
-				sh 'gradle test'
-				junit '**/jacoco/test-results/*.xml'
 			}
 		
 		}
@@ -57,7 +55,7 @@ pipeline {
 				echo "STATIC CODE ANALYSIS"
 				
 				withSonarQubeEnv('Sonar') {
-					sh "${tool name: 'SonarScanner',type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner -Dproject.settings=sonar-project.properties -Dsonar.organization=mariam0103-github  -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=6294439d51de179b274690e548b084ac32b14a0d"
+					sh "${tool name: 'SonarScanner',type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
 				}
 			}
 		
@@ -66,7 +64,7 @@ pipeline {
 		stage('Build') {
 			steps {
 				echo "------------>Build<------------"
-				sh 'gradle --b ./build.gradle build -x test'
+				sh 'gradle --b ./build.gradle build'
 
 			}
 		
