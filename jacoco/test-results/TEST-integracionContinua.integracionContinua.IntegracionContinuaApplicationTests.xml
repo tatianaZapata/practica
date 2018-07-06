@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="integracionContinua.integracionContinua.IntegracionContinuaApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-07-06T21:29:19" hostname="TATIANA-ZAPATA" time="0.001">
+  <properties/>
+  <testcase name="contextLoads" classname="integracionContinua.integracionContinua.IntegracionContinuaApplicationTests" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
