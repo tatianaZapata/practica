@@ -1,71 +1,109 @@
 pipeline {
- 	//Donde se va a ejecutar el Pipeline
-	 agent {
-	 	label 'Slave_Induccion'
-	 }
-	 //Opciones específicas de Pipeline dentro del Pipeline
-	 options {
-		//Mantener artefactos y salida de consola para el # específico de ejecuciones
-		recientes del Pipeline.
+	agent {
+		label 'Slave_Induccion'
+	
+	}
+	
+	options {
 		buildDiscarder(logRotator(numToKeepStr: '3'))
-		//No permitir ejecuciones concurrentes de Pipeline
 		disableConcurrentBuilds()
-	 }
-	 //Una sección que define las herramientas para “autoinstalar” y poner en la PATH
-	 tools {
-		 jdk 'JDK8_Centos' //Preinstalada en la Configuración del Master
-		 gradle 'Gradle4.5_Centos' //Preinstalada en la Configuración del Master
-	 }
-	 //Aquí comienzan los “items” del Pipeline
-	 stages{
-		 stage('Checkout') {
-			 steps{
-			 	echo "------------>Checkout<------------"
-			 }
-		 }
-		 stage('Unit Tests') {
-			 steps{
-			 echo "------------>Unit Tests<------------"
-			 }
-	 	}
+	
+	}
+	
+	tools {
+		jdk 'JDK8_Centos'
+		gradle 'Gradle4.5_Centos'
+	
+	}
+	
+	stages {
+		stage('Checkout Code') {
+			steps {
+				echo "------------>Checkout<------------"
+				checkout([$class: 'GitSCM', branches: [[name: '*/desarrollo']],
+				doGenerateSubmoduleConfigurations: false, extensions: [], gitTool:
+				'Git_Centos', submoduleCfg: [], userRemoteConfigs: [[credentialsId:
+				'GitHub_tatianaZapata', url:
+				'https://github.com/tatianaZapata/practica']]])
+			}
+		
+		}
+		
+		stage('Compile') {
+			steps{
+				echo "------------>COMPILE<------------"
+				sh 'gradle --b ./build.gradle compileJava'
+			}
+		}
+		
+		stage('Unit Tests') {
+			steps {
+				echo "------------>Unit Tests<------------"
+				sh 'gradle test'
+				junit '**/jacoco/test-results/*.xml'
+			}
+		
+		}
+		
 		stage('Integration Tests') {
-			 steps {
-			 echo "------------>Integration Tests<------------"
-			 }
-	 	}
-		 stage('Static Code Analysis') {
-			 steps{
-				 echo '------------>Análisis de código estático<------------'
-				 withSonarQubeEnv('Sonar') {
-				sh "${tool name: 'SonarScanner',
-				type:'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner
-				-Dproject.settings=sonar-project.properties"
-				Prácticas Técnicas (Gerencia Técnica)
-			 }
-		 }
-	 }
-	 stage('Build') {
-		 steps {
-		 	echo "------------>Build<------------"
-		 }
+			steps {
+				echo "INTEGRATION TESTS"
+			
+			}
+		}
+		
+		stage('Static Code Analysis') {
+			steps {
+				echo "STATIC CODE ANALYSIS"
+				
+				withSonarQubeEnv('Sonar') {
+					sh "${tool name: 'SonarScanner',type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner -Dproject.settings=sonar-project.properties -Dsonar.organization=mariam0103-github  -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=6294439d51de179b274690e548b084ac32b14a0d"
+				}
+			}
+		
+		}
+		
+		stage('Build') {
+			steps {
+				echo "------------>Build<------------"
+				sh 'gradle --b ./build.gradle build -x test'
+
+			}
+		
+		}
+	
+	
 	}
-	}
+	
 	post {
-	 always {
-	 echo 'This will always run'
-	 }
-	 success {
-	 echo 'This will run only if successful'
-	 }
-	 failure {
-	 echo 'This will run only if failed'
-	 }
-	 unstable {
-	 echo 'This will run only if the run was marked as unstable'
-	 }
-	 changed {
-	 echo 'This will run only if the state of the Pipeline has changed'
-	 echo 'For example, if the Pipeline was previously failing but is now successful'
-	 }
-	 }
+		always {
+			echo "This will always run"
+		
+		}
+		
+		success {
+			echo 'This will run only if successful'
+		}
+		
+		failure {
+			echo 'This will run only if failed'
+			mail (to: 'tatiana.zapata@ceiba.com.co',subject: "Failed Pipeline:${currentBuild.fullDisplayName}",body: "Something is wrong with ${env.BUILD_URL}")
+
+		}
+		
+		unstable {
+			echo "run unstable"
+		
+		}
+		
+		changed {
+			echo "Pipeline state has changed"
+		
+		}
+
+		
+	
+	}
+
+
 }
