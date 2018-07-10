@@ -1,9 +1,9 @@
-package integracionContinua.services;
+package com.estacionamiento.services;
 
 import java.util.List;
 import java.util.Optional;
 
-import integracionContinua.models.TipoVehiculos;
+import com.estacionamiento.models.TipoVehiculos;
 
 public interface TipoVehiculosService {
 

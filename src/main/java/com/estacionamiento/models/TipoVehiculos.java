@@ -1,4 +1,4 @@
-package integracionContinua.models;
+package com.estacionamiento.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
