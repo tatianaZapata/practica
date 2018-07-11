@@ -1,9 +1,9 @@
 package com.estacionamiento.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.estacionamiento.models.Vehiculos;
 import com.estacionamiento.services.VehiculosService;
 
@@ -28,14 +27,19 @@ public class VehiculosController {
 	@Autowired
 	private VehiculosService vehiculoService;
 
-	@PostMapping("/vehiculos")
-	public Vehiculos crearVehiculo (@RequestBody Vehiculos vehiculo) {
-		return vehiculoService.crearVehiculo(vehiculo);
+	@GetMapping("/vehiculos")
+	public ResponseEntity<List<Vehiculos>> listarVehidulos (){
+		return new ResponseEntity<>(vehiculoService.listarVehidulos(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/vehiculos/{placa}")
 	public Optional<Vehiculos> consultarVehiculo (@PathVariable String placa){
 		return vehiculoService.consultarVehiculo(placa);
+	}
+	
+	@PostMapping("/vehiculos")
+	public Vehiculos crearVehiculo (@RequestBody Vehiculos vehiculo) {
+		return vehiculoService.crearVehiculo(vehiculo);
 	}
 	
 	@PutMapping("/vehiculos")
@@ -48,8 +52,4 @@ public class VehiculosController {
 		vehiculoService.eliminarVehiculo(placa);
 	}	
 	
-	@GetMapping("/vehiculos")
-	public ResponseEntity<List<Vehiculos>> listarVehidulos (){
-		return new ResponseEntity<>(vehiculoService.listarVehidulos(), HttpStatus.OK);
-	}
 }

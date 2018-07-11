@@ -28,9 +28,9 @@ public class TipoVehiculosController {
 		return tipoVehiculosService.listarTipoVehiculos();
 	}
 
-	@GetMapping("/tipoVehiculos/{id}")
-	public Optional<TipoVehiculo> consultarTipoVehiculo (@PathVariable Integer id_tipo){
-		return tipoVehiculosService.consultarTipoVehiculo(id_tipo);
+	@GetMapping("/tipoVehiculos/{idTipo}")
+	public Optional<TipoVehiculo> consultarTipoVehiculo (@PathVariable Integer idTipo){
+		return tipoVehiculosService.consultarTipoVehiculo(idTipo);
 	}
 
 	@PostMapping("/tipoVehiculos")
@@ -43,9 +43,9 @@ public class TipoVehiculosController {
 		return tipoVehiculosService.modificarTipoVehiculo(tipoVehiculo);
 	}
 	
-	@DeleteMapping("/tipoVehiculos/{id}")
-	public void eliminarTipoVehiculo (@PathVariable Integer id_tipo) {
-		tipoVehiculosService.eliminarTipoVehiculo(id_tipo);
+	@DeleteMapping("/tipoVehiculos/{idTipo}")
+	public void eliminarTipoVehiculo (@PathVariable Integer idTipo) {
+		tipoVehiculosService.eliminarTipoVehiculo(idTipo);
 	}
 	
 }
