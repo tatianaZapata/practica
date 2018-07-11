@@ -1,25 +1,28 @@
 package com.estacionamiento.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class TipoVehiculos {
+public class TipoVehiculo {
 	
 	@Id
-	@GeneratedValue
-	private Integer id_tipo;
+	@Column(name = "id_tipo")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer idTipo;
 	
+	@Column(name = "descripcion")
 	private String descripcion;
-
 	
-	public Integer getId_tipo() {
-		return id_tipo;
+	public Integer getIdTipo() {
+		return idTipo;
 	}
 
-	public void setId_tipo(Integer id_tipo) {
-		this.id_tipo = id_tipo;
+	public void setIdTipo(Integer idTipo) {
+		this.idTipo = idTipo;
 	}
 
 	public String getDescripcion() {

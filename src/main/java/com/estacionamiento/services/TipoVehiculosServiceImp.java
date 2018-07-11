@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.estacionamiento.models.TipoVehiculos;
+import com.estacionamiento.models.TipoVehiculo;
 import com.estacionamiento.repositories.TipoVehiculosRepository;
 
 @Service
@@ -19,17 +19,17 @@ public class TipoVehiculosServiceImp implements TipoVehiculosService{
 	private TipoVehiculosRepository tipoVehiculoRepository;
 
 	@Override
-	public TipoVehiculos crearTipoVehiculo(TipoVehiculos tipoVehiculo) {
+	public TipoVehiculo crearTipoVehiculo(TipoVehiculo tipoVehiculo) {
 		return tipoVehiculoRepository.save(tipoVehiculo);
 	}
 
 	@Override
-	public Optional<TipoVehiculos> consultarTipoVehiculo(Integer id_tipo) {
+	public Optional<TipoVehiculo> consultarTipoVehiculo(Integer id_tipo) {
 		return tipoVehiculoRepository.findById(id_tipo);
 	}
 
 	@Override
-	public TipoVehiculos modificarTipoVehiculo(TipoVehiculos tipoVehiculo) {
+	public TipoVehiculo modificarTipoVehiculo(TipoVehiculo tipoVehiculo) {
 		return tipoVehiculoRepository.save(tipoVehiculo);
 	}
 
@@ -39,7 +39,7 @@ public class TipoVehiculosServiceImp implements TipoVehiculosService{
 	}
 
 	@Override
-	public List<TipoVehiculos> listarTipoVehiculos() {
+	public List<TipoVehiculo> listarTipoVehiculos() {
 		return tipoVehiculoRepository.findAll();
 	}
 

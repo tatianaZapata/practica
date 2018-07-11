@@ -3,17 +3,17 @@ package com.estacionamiento.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.estacionamiento.models.TipoVehiculos;
+import com.estacionamiento.models.TipoVehiculo;
 
 public interface TipoVehiculosService {
 
-	TipoVehiculos crearTipoVehiculo (TipoVehiculos tipoVehiculo);
+	TipoVehiculo crearTipoVehiculo (TipoVehiculo tipoVehiculo);
 	
-	Optional<TipoVehiculos> consultarTipoVehiculo (Integer id_tipo);
+	Optional<TipoVehiculo> consultarTipoVehiculo (Integer id_tipo);
 	
-	TipoVehiculos modificarTipoVehiculo (TipoVehiculos tipoVehiculo);
+	TipoVehiculo modificarTipoVehiculo (TipoVehiculo tipoVehiculo);
 	
 	void eliminarTipoVehiculo (Integer id_tipo);
 	
-	List<TipoVehiculos> listarTipoVehiculos ();
+	List<TipoVehiculo> listarTipoVehiculos ();
 }
