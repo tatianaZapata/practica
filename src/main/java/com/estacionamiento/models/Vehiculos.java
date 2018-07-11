@@ -21,7 +21,7 @@ public class Vehiculos {
 	private Integer cilindraje;
 	
 	@NotNull
-	@Column(name = "tipo_vehiculo")
+	@Column(name = "fk_tipo_vehiculo")
 	private Integer codigoTipoVehiculo;
 	
 	@NotNull
@@ -32,7 +32,7 @@ public class Vehiculos {
 	private LocalDateTime fechaSalida;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "tipo_vehiculo", insertable = false, updatable = false)
+	@JoinColumn(name = "fk_tipo_vehiculo", insertable = false, updatable = false)
 	private TipoVehiculo tipoVehiculo;
 	
 	public String getPlaca() {
