@@ -28,10 +28,10 @@ public class VehiculosServiceImp implements VehiculosService {
 	private VehiculosRepository vehiculoRepository;
 
 	@Override
-	public Vehiculo crearVehiculo(Vehiculo vehiculo) {
+	public Vehiculo crearVehiculo(Vehiculo vehiculo) throws Exception {
 		try {
 			boolean hayCupo = verificarCapacidad(vehiculo);
-
+	
 			if (!hayCupo) {
 				LOGGER.info("No hay cupo");
 				throw new Exception("No hay cupo");
@@ -45,8 +45,7 @@ public class VehiculosServiceImp implements VehiculosService {
 			}
 			return vehiculoRepository.save(vehiculo);
 		} catch (Exception e) {
-			LOGGER.info(" -------------------- Error en crearVehiculo: " + e);
-			return null;
+			throw e;
 		}
 	}
 
@@ -121,11 +120,11 @@ public class VehiculosServiceImp implements VehiculosService {
 			if (!vehiculo.isPresent()) {
 				throw new Exception("No existe un vehiculo con esa placa");
 			}
-			
-			//Se actualiza la fecha de salida
+
+			// Se actualiza la fecha de salida
 			vehiculo.get().setFechaSalida(LocalDateTime.now());
 			vehiculoRepository.save(vehiculo.get());
-			
+
 			LocalDateTime fechaIngreso = vehiculo.get().getFechaIngreso();
 			LocalDateTime fechaSalida = vehiculo.get().getFechaSalida();
 			Duration duracion = Duration.between(fechaIngreso, fechaSalida);
@@ -162,7 +161,8 @@ public class VehiculosServiceImp implements VehiculosService {
 					}
 				} else {
 					// Calcular dias y horas
-					BigDecimal cantidadDias = new BigDecimal(horasTranscurridas).divide(new BigDecimal(24), 0, RoundingMode.HALF_UP);
+					BigDecimal cantidadDias = new BigDecimal(horasTranscurridas).divide(new BigDecimal(24), 0,
+							RoundingMode.HALF_UP);
 					BigDecimal cantidadHoras = new BigDecimal(horasTranscurridas).remainder(new BigDecimal(24));
 					BigDecimal totalValorDias = cantidadDias.multiply(Constants.VALOR_DIA_MOTO);
 					BigDecimal totalValorHoras = cantidadHoras.multiply(Constants.VALOR_HORA_MOTO);

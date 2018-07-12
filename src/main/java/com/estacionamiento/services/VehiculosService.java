@@ -8,7 +8,7 @@ import com.estacionamiento.models.Vehiculo;
 
 public interface VehiculosService {
 	
-	Vehiculo crearVehiculo (Vehiculo vehiculo);
+	Vehiculo crearVehiculo (Vehiculo vehiculo) throws Exception;
 	
 	Optional<Vehiculo> consultarVehiculo (String placa);
 	

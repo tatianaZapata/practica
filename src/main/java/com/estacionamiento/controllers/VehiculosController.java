@@ -38,7 +38,7 @@ public class VehiculosController {
 	}
 	
 	@PostMapping("/vehiculos")
-	public Vehiculo crearVehiculo (@RequestBody Vehiculo vehiculo) {
+	public Vehiculo crearVehiculo (@RequestBody Vehiculo vehiculo) throws Exception {
 		return vehiculoService.crearVehiculo(vehiculo);
 	}
 	
