@@ -1,6 +1,6 @@
 package com.estacionamiento.controllers;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -52,4 +52,8 @@ public class VehiculosController {
 		vehiculoService.eliminarVehiculo(placa);
 	}	
 	
+	@GetMapping("/salir/{placa}")
+	public BigDecimal salirDeEstacionamiento (@PathVariable String placa){
+		return vehiculoService.calcularTotalAPagar(placa);
+	}
 }

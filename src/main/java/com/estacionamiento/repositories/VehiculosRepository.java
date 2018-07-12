@@ -15,7 +15,7 @@ public interface VehiculosRepository extends JpaRepository<Vehiculo, String>{
 
 	List<Vehiculo> findByFechaIngreso(LocalDateTime fechaIngreso);
 	
-	@Query("SELECT v FROM Vehiculos v JOIN FETCH v.tipoVehiculo tipoveh WHERE tipoveh.descripcion = :tipoVehiculo")
+	@Query("SELECT v FROM Vehiculo v JOIN FETCH v.tipoVehiculo tipoveh WHERE tipoveh.descripcion = :tipoVehiculo")
     List<Vehiculo> findByTipo(@Param("tipoVehiculo") String tipoVehiculo);
 	
 	List<Vehiculo> findByCodigoTipoVehiculo(@Param("tipoVehiculo") String tipoVehiculo);
