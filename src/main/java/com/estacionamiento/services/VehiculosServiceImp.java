@@ -1,9 +1,10 @@
 package com.estacionamiento.services;
 
+import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.estacionamiento.controllers.VehiculosController;
+import com.estacionamiento.models.TipoVehiculo.TipoDeVehiculo;
 import com.estacionamiento.models.Vehiculos;
 import com.estacionamiento.repositories.VehiculosRepository;
 
@@ -28,18 +30,16 @@ public class VehiculosServiceImp implements VehiculosService{
 
 	@Override
 	public Vehiculos crearVehiculo(Vehiculos vehiculo) {
-//		return vehiculoRepository.save(vehiculo);
 		try {
 			boolean hayCupo = verificarCapacidad(vehiculo);
-			char letraInicial = vehiculo.getPlaca().charAt(0);
-			
-			if(!hayCupo) {
+
+			if (!hayCupo) {
 				LOGGER.info("No hay cupo");
 				return null;
 			}
-			if(letraInicial == 'a' || letraInicial == 'A') {
+			if (vehiculo.getPlaca().startsWith("A") || vehiculo.getPlaca().startsWith("a")) {
 				boolean diaPermitido = validarDia();
-				if(!diaPermitido) {
+				if (!diaPermitido) {
 					LOGGER.info("No está autorizado a ingresar este día");
 					return null;
 				}
@@ -63,17 +63,7 @@ public class VehiculosServiceImp implements VehiculosService{
 
 	@Override
 	public void eliminarVehiculo(String placa) {
-		try {
-			Optional<Vehiculos> vehiculo = vehiculoRepository.findById(placa);
-			if(vehiculo != null) {
-				
-			} else {
-				LOGGER.info("No existe el vehículo con placa: " + placa);
-			}
-			vehiculoRepository.deleteById(placa);
-		} catch (Exception e) {
-			LOGGER.info("Error en eliminarVehiculo: " + e);
-		}
+		vehiculoRepository.deleteById(placa);
 	}
 
 	@Override
@@ -90,15 +80,15 @@ public class VehiculosServiceImp implements VehiculosService{
 			boolean hayCupo = false;
 			Integer quantity = 0;
 			
-			switch(vehiculo.getTipoVehiculo().getDescripcion()) {
-				case "carro": 
-					quantity = vehiculoRepository.findByTipo("carro").size();
+			switch(vehiculo.getCodigoTipoVehiculo()) {
+				case "CARRO":
+					quantity = vehiculoRepository.findByCodigoTipoVehiculo(TipoDeVehiculo.CARRO.name()).size();
 					if(quantity < 20)
 						hayCupo = true;
 					break;
 					
-				case "moto": 
-					quantity = vehiculoRepository.findByTipo("moto").size();
+				case "MOTO": 
+					quantity = vehiculoRepository.findByCodigoTipoVehiculo(TipoDeVehiculo.MOTO.name()).size();
 					if(quantity < 10)
 						hayCupo = true;
 					break;
@@ -115,13 +105,28 @@ public class VehiculosServiceImp implements VehiculosService{
 	
 	private boolean validarDia() {
 		boolean diaValido = false;
-		GregorianCalendar cal = new GregorianCalendar();
-		cal.setTime(new Date());
-		Integer dia = cal.get(Calendar.DAY_OF_WEEK);
-		if(dia == 1 || dia == 2)
+		DayOfWeek diaSemana = LocalDate.now().getDayOfWeek();
+		if(diaSemana.equals(DayOfWeek.SUNDAY) ||  diaSemana.equals(DayOfWeek.MONDAY)) {
 			diaValido = true;
-
+		}
 		return diaValido;
+	}
+
+	@Override
+	public BigDecimal calcularTotalAPagar(String placa) {
+		Optional<Vehiculos> vehiculo = vehiculoRepository.findById(placa);
+		if(!vehiculo.isPresent()) {
+			return BigDecimal.ZERO;
+		}
+		if(vehiculo.get().getCodigoTipoVehiculo().equals(TipoDeVehiculo.CARRO.name())) {
+			LocalDateTime fechaIngreso = vehiculo.get().getFechaIngreso();
+			LocalDateTime fechaSalida = LocalDateTime.now();
+			Duration duracion = Duration.between(fechaIngreso, fechaSalida);
+			Long horasTranscurridas = duracion.toHours();
+			
+			
+		}
+		return null;
 	}
 
 }

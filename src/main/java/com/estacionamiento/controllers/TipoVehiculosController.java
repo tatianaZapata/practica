@@ -23,28 +23,28 @@ public class TipoVehiculosController {
 	@Autowired
 	private TipoVehiculosService tipoVehiculosService;
 
-	@GetMapping("/tipoVehiculos")
+	@GetMapping("/tipo-vehiculos")
 	public List<TipoVehiculo> listarTipoVehiculos (){
 		return tipoVehiculosService.listarTipoVehiculos();
 	}
 
-	@GetMapping("/tipoVehiculos/{idTipo}")
-	public Optional<TipoVehiculo> consultarTipoVehiculo (@PathVariable Integer idTipo){
+	@GetMapping("/tipo-vehiculos/{idTipo}")
+	public Optional<TipoVehiculo> consultarTipoVehiculo (@PathVariable String idTipo){
 		return tipoVehiculosService.consultarTipoVehiculo(idTipo);
 	}
 
-	@PostMapping("/tipoVehiculos")
+	@PostMapping("/tipo-vehiculos")
 	public TipoVehiculo crearTipoVehiculo (@RequestBody TipoVehiculo tipoVehiculo) {
 		return tipoVehiculosService.crearTipoVehiculo(tipoVehiculo);
 	}
 	
-	@PutMapping("/tipoVehiculos")
+	@PutMapping("/tipo-vehiculos")
 	public TipoVehiculo modificarTipoVehiculo (@RequestBody TipoVehiculo tipoVehiculo) {
 		return tipoVehiculosService.modificarTipoVehiculo(tipoVehiculo);
 	}
 	
-	@DeleteMapping("/tipoVehiculos/{idTipo}")
-	public void eliminarTipoVehiculo (@PathVariable Integer idTipo) {
+	@DeleteMapping("/tipo-vehiculos/{idTipo}")
+	public void eliminarTipoVehiculo (@PathVariable String idTipo) {
 		tipoVehiculosService.eliminarTipoVehiculo(idTipo);
 	}
 	

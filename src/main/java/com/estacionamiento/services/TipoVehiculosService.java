@@ -9,11 +9,11 @@ public interface TipoVehiculosService {
 
 	TipoVehiculo crearTipoVehiculo (TipoVehiculo tipoVehiculo);
 	
-	Optional<TipoVehiculo> consultarTipoVehiculo (Integer id_tipo);
+	Optional<TipoVehiculo> consultarTipoVehiculo (String id_tipo);
 	
 	TipoVehiculo modificarTipoVehiculo (TipoVehiculo tipoVehiculo);
 	
-	void eliminarTipoVehiculo (Integer id_tipo);
+	void eliminarTipoVehiculo (String id_tipo);
 	
 	List<TipoVehiculo> listarTipoVehiculos ();
 }

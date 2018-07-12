@@ -2,9 +2,9 @@ package com.estacionamiento.constants;
 
 public class Constants {
 	
-	private final Double valorHoraCarro = 1000D;
-	private final Double valorHoraMoto = 500D;
-	private final Double valorDiaCarro = 8000D;
-	private final Double valorDiaMoto = 4000D;
+	private static final Double VALOR_HORA_CARRO = 1000D;
+	private static final Double VALOR_HORA_MOTO = 500D;
+	private static final Double VALOR_DIA_CARRO = 8000D;
+	private static final Double VALOR_DIA_MOTO = 4000D;
 
 }

@@ -22,7 +22,7 @@ public class Vehiculos {
 	
 	@NotNull
 	@Column(name = "fk_tipo_vehiculo")
-	private Integer codigoTipoVehiculo;
+	private String codigoTipoVehiculo;
 	
 	@NotNull
 	@Column(name = "fecha_ingreso")
@@ -51,11 +51,11 @@ public class Vehiculos {
 		this.cilindraje = cilindraje;
 	}
 
-	public Integer getCodigoTipoVehiculo() {
+	public String getCodigoTipoVehiculo() {
 		return codigoTipoVehiculo;
 	}
 
-	public void setCodigoTipoVehiculo(Integer codigoTipoVehiculo) {
+	public void setCodigoTipoVehiculo(String codigoTipoVehiculo) {
 		this.codigoTipoVehiculo = codigoTipoVehiculo;
 	}
 
