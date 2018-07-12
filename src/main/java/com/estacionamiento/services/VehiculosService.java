@@ -4,19 +4,19 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import com.estacionamiento.models.Vehiculos;
+import com.estacionamiento.models.Vehiculo;
 
 public interface VehiculosService {
 	
-	Vehiculos crearVehiculo (Vehiculos vehiculo);
+	Vehiculo crearVehiculo (Vehiculo vehiculo);
 	
-	Optional<Vehiculos> consultarVehiculo (String placa);
+	Optional<Vehiculo> consultarVehiculo (String placa);
 	
-	Vehiculos modificarVehiculo (Vehiculos vehiculo);
+	Vehiculo modificarVehiculo (Vehiculo vehiculo);
 	
 	void eliminarVehiculo (String placa);
 	
-	List<Vehiculos> listarVehidulos ();
+	List<Vehiculo> listarVehidulos ();
 	
 	BigDecimal calcularTotalAPagar (String placa);
 

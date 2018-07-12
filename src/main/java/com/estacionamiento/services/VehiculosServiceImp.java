@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.estacionamiento.controllers.VehiculosController;
 import com.estacionamiento.models.TipoVehiculo.TipoDeVehiculo;
-import com.estacionamiento.models.Vehiculos;
+import com.estacionamiento.models.Vehiculo;
 import com.estacionamiento.repositories.VehiculosRepository;
 
 @Service
@@ -29,7 +29,7 @@ public class VehiculosServiceImp implements VehiculosService{
 	private VehiculosRepository vehiculoRepository;
 
 	@Override
-	public Vehiculos crearVehiculo(Vehiculos vehiculo) {
+	public Vehiculo crearVehiculo(Vehiculo vehiculo) {
 		try {
 			boolean hayCupo = verificarCapacidad(vehiculo);
 
@@ -52,12 +52,12 @@ public class VehiculosServiceImp implements VehiculosService{
 	}
 
 	@Override
-	public Optional<Vehiculos> consultarVehiculo(String placa) {
+	public Optional<Vehiculo> consultarVehiculo(String placa) {
 		return vehiculoRepository.findById(placa);
 	}
 
 	@Override
-	public Vehiculos modificarVehiculo(Vehiculos vehiculo) {
+	public Vehiculo modificarVehiculo(Vehiculo vehiculo) {
 		return vehiculoRepository.save(vehiculo);
 	}
 
@@ -67,15 +67,15 @@ public class VehiculosServiceImp implements VehiculosService{
 	}
 
 	@Override
-	public List<Vehiculos> listarVehidulos() {
+	public List<Vehiculo> listarVehidulos() {
 		return vehiculoRepository.findAll();
 	}
 	
-	public List<Vehiculos> listarIngresosDia() {
+	public List<Vehiculo> listarIngresosDia() {
 		return vehiculoRepository.findByFechaIngreso(LocalDateTime.now());
 	}
 	
-	private boolean verificarCapacidad(Vehiculos vehiculo) {
+	private boolean verificarCapacidad(Vehiculo vehiculo) {
 		try {
 			boolean hayCupo = false;
 			Integer quantity = 0;
@@ -114,7 +114,7 @@ public class VehiculosServiceImp implements VehiculosService{
 
 	@Override
 	public BigDecimal calcularTotalAPagar(String placa) {
-		Optional<Vehiculos> vehiculo = vehiculoRepository.findById(placa);
+		Optional<Vehiculo> vehiculo = vehiculoRepository.findById(placa);
 		if(!vehiculo.isPresent()) {
 			return BigDecimal.ZERO;
 		}
@@ -124,7 +124,16 @@ public class VehiculosServiceImp implements VehiculosService{
 			Duration duracion = Duration.between(fechaIngreso, fechaSalida);
 			Long horasTranscurridas = duracion.toHours();
 			
-			
+			if(horasTranscurridas < 9) {
+				//Cobrar por horas
+				
+			}else if(horasTranscurridas >= 9 && horasTranscurridas <= 24){
+				//Cobrar por dia
+				
+			}else{
+				//Calcular dias y horas
+				
+			}
 		}
 		return null;
 	}

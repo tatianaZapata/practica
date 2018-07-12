@@ -8,17 +8,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.estacionamiento.models.Vehiculos;
+import com.estacionamiento.models.Vehiculo;
 
 @Repository
-public interface VehiculosRepository extends JpaRepository<Vehiculos, String>{
+public interface VehiculosRepository extends JpaRepository<Vehiculo, String>{
 
-	List<Vehiculos> findByFechaIngreso(LocalDateTime fechaIngreso);
+	List<Vehiculo> findByFechaIngreso(LocalDateTime fechaIngreso);
 	
 	@Query("SELECT v FROM Vehiculos v JOIN FETCH v.tipoVehiculo tipoveh WHERE tipoveh.descripcion = :tipoVehiculo")
-    List<Vehiculos> findByTipo(@Param("tipoVehiculo") String tipoVehiculo);
+    List<Vehiculo> findByTipo(@Param("tipoVehiculo") String tipoVehiculo);
 	
-	List<Vehiculos> findByCodigoTipoVehiculo(@Param("tipoVehiculo") String tipoVehiculo);
+	List<Vehiculo> findByCodigoTipoVehiculo(@Param("tipoVehiculo") String tipoVehiculo);
 //	@Query(value = "SELECT * FROM vehiculos veh INNER JOIN tipo_vehiculo tip ON veh.fk_tipo_vehiculo = tip.id_tipo WHERE tip.descripcion = 'moto';", nativeQuery=true)
 //    public List<Vehiculos> findByMoto();
 

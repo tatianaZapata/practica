@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Vehiculos {
+public class Vehiculo {
 
 	@Id
 	private String placa;
