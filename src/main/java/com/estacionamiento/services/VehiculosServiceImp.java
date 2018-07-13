@@ -194,7 +194,7 @@ public class VehiculosServiceImp implements VehiculosService {
 			}
 			
 			//Actualizar historico
-			HistoricoIngresos historico = historicoIngresosRepository.findByPlacaOrderByFechaIngresoDescfindTop1By1(vehiculo.get().getPlaca());
+			HistoricoIngresos historico = historicoIngresosRepository.findTop1ByPlacaOrderByFechaIngresoDesc(vehiculo.get().getPlaca());
 			historico.setFechaSalida(vehiculo.get().getFechaSalida());
 			historico.setPrecio(totalAPagar);
 			historicoIngresosRepository.save(historico);

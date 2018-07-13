@@ -8,6 +8,6 @@ import com.estacionamiento.models.HistoricoIngresos;
 @Repository
 public interface HistoricoIngresosRepository extends JpaRepository<HistoricoIngresos, Integer>{
 	
-	HistoricoIngresos findByPlacaOrderByFechaIngresoDescfindTop1By1(@Param("placa") String placa);
+	HistoricoIngresos findTop1ByPlacaOrderByFechaIngresoDesc(@Param("placa") String placa);
 
 }
