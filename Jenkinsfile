@@ -53,9 +53,8 @@ pipeline {
 		stage('Static Code Analysis') {
 			steps {
 				echo "STATIC CODE ANALYSIS"
-				
 				withSonarQubeEnv('Sonar') {
-					sh "${tool name: 'SonarScanner',type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner"
+					sh "${tool name: 'SonarScanner', type:'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"}
 				}
 			}
 		
@@ -81,6 +80,8 @@ pipeline {
 		
 		success {
 			echo 'This will run only if successful'
+			junit 'build/test-results/*.xml'
+			jacoco 'jacoco/test-results/*.xml'
 		}
 		
 		failure {
