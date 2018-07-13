@@ -10,14 +10,14 @@ public interface VehiculosService {
 	
 	Vehiculo crearVehiculo (Vehiculo vehiculo) throws Exception;
 	
-	Optional<Vehiculo> consultarVehiculo (String placa);
+	Optional<Vehiculo> consultarVehiculo (String placa) throws Exception;
 	
-	Vehiculo modificarVehiculo (Vehiculo vehiculo);
+	Vehiculo modificarVehiculo (Vehiculo vehiculo) throws Exception;
 	
-	void eliminarVehiculo (String placa);
+	void eliminarVehiculo (String placa) throws Exception;
 	
-	List<Vehiculo> listarVehidulos ();
+	List<Vehiculo> listarVehidulos () throws Exception;
 	
-	BigDecimal calcularTotalAPagar (String placa);
+	BigDecimal calcularTotalAPagar (String placa) throws Exception;
 
 }

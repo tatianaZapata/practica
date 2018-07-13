@@ -28,12 +28,12 @@ public class VehiculosController {
 	private VehiculosService vehiculoService;
 
 	@GetMapping("/vehiculos")
-	public ResponseEntity<List<Vehiculo>> listarVehidulos (){
+	public ResponseEntity<List<Vehiculo>> listarVehidulos () throws Exception{
 		return new ResponseEntity<>(vehiculoService.listarVehidulos(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/vehiculos/{placa}")
-	public Optional<Vehiculo> consultarVehiculo (@PathVariable String placa){
+	public Optional<Vehiculo> consultarVehiculo (@PathVariable String placa) throws Exception{
 		return vehiculoService.consultarVehiculo(placa);
 	}
 	
@@ -43,17 +43,17 @@ public class VehiculosController {
 	}
 	
 	@PutMapping("/vehiculos")
-	public Vehiculo modificarVehiculo (@RequestBody Vehiculo vehiculo) {
+	public Vehiculo modificarVehiculo (@RequestBody Vehiculo vehiculo)  throws Exception{
 		return vehiculoService.modificarVehiculo(vehiculo);
 	}
 	
 	@DeleteMapping("/vehiculos/{placa}")
-	public void eliminarVehiculo (@PathVariable String placa) {
+	public void eliminarVehiculo (@PathVariable String placa) throws Exception {
 		vehiculoService.eliminarVehiculo(placa);
 	}	
 	
 	@GetMapping("/salir/{placa}")
-	public BigDecimal salirDeEstacionamiento (@PathVariable String placa){
+	public BigDecimal salirDeEstacionamiento (@PathVariable String placa) throws Exception{
 		return vehiculoService.calcularTotalAPagar(placa);
 	}
 }

@@ -3,6 +3,7 @@ package com.estacionamiento.models;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class TipoVehiculo {
@@ -11,6 +12,7 @@ public class TipoVehiculo {
 	@Column(name = "id_tipo")
 	private String idTipo;
 
+	@NotNull
 	@Column(name = "descripcion")
 	private String descripcion;
 

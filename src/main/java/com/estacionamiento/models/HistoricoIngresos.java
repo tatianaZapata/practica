@@ -1,28 +1,29 @@
 package com.estacionamiento.models;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Vehiculo {
-
+public class HistoricoIngresos {
+	
 	@Id
+	@Column(name = "id_historico")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long idHistorico;
+	
+	@NotNull
+	@Column(name = "fk_placa")
 	private String placa;
-	
-	@NotNull
-	@Column(name = "cilindraje")
-	private Integer cilindraje;
-	
-	@NotNull
-	@Column(name = "fk_tipo_vehiculo")
-	private String codigoTipoVehiculo;
 	
 	@NotNull
 	@Column(name = "fecha_ingreso")
@@ -31,35 +32,19 @@ public class Vehiculo {
 	@Column(name = "fecha_salida")
 	private LocalDateTime fechaSalida;
 	
-	@Column(name = "estado")
-	private boolean estado;
+	@Column(name = "precio")
+	private BigDecimal precio;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "fk_tipo_vehiculo", insertable = false, updatable = false)
-	private TipoVehiculo tipoVehiculo;
-	
+	@JoinColumn(name = "fk_placa", insertable = false, updatable = false)
+	private Vehiculo vehiculoHistorico;
+
 	public String getPlaca() {
 		return placa;
 	}
-	
+
 	public void setPlaca(String placa) {
 		this.placa = placa;
-	}
-	
-	public Integer getCilindraje() {
-		return cilindraje;
-	}
-	
-	public void setCilindraje(Integer cilindraje) {
-		this.cilindraje = cilindraje;
-	}
-
-	public String getCodigoTipoVehiculo() {
-		return codigoTipoVehiculo;
-	}
-
-	public void setCodigoTipoVehiculo(String codigoTipoVehiculo) {
-		this.codigoTipoVehiculo = codigoTipoVehiculo;
 	}
 
 	public LocalDateTime getFechaIngreso() {
@@ -78,22 +63,29 @@ public class Vehiculo {
 		this.fechaSalida = fechaSalida;
 	}
 
-	public TipoVehiculo getTipoVehiculo() {
-		return tipoVehiculo;
+	public BigDecimal getPrecio() {
+		return precio;
 	}
 
-	public void setTipoVehiculo(TipoVehiculo tipoVehiculo) {
-		this.tipoVehiculo = tipoVehiculo;
+	public void setPrecio(BigDecimal precio) {
+		this.precio = precio;
 	}
 
-	public boolean isEstado() {
-		return estado;
+	public Long getIdHistorico() {
+		return idHistorico;
 	}
 
-	public void setEstado(boolean estado) {
-		this.estado = estado;
+	public void setIdHistorico(Long idHistorico) {
+		this.idHistorico = idHistorico;
 	}
 
-	
+	public Vehiculo getVehiculoHistorico() {
+		return vehiculoHistorico;
+	}
+
+	public void setVehiculoHistorico(Vehiculo vehiculoHistorico) {
+		this.vehiculoHistorico = vehiculoHistorico;
+	}
+
 	
 }

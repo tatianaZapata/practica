@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.estacionamiento.constants.Constants;
 import com.estacionamiento.controllers.VehiculosController;
+import com.estacionamiento.models.HistoricoIngresos;
 import com.estacionamiento.models.TipoVehiculo.TipoDeVehiculo;
 import com.estacionamiento.models.Vehiculo;
+import com.estacionamiento.repositories.HistoricoIngresosRepository;
 import com.estacionamiento.repositories.VehiculosRepository;
 
 @Service
@@ -26,6 +28,9 @@ public class VehiculosServiceImp implements VehiculosService {
 
 	@Autowired
 	private VehiculosRepository vehiculoRepository;
+
+	@Autowired
+	private HistoricoIngresosRepository historicoIngresosRepository;
 
 	@Override
 	public Vehiculo crearVehiculo(Vehiculo vehiculo) throws Exception {
@@ -43,6 +48,21 @@ public class VehiculosServiceImp implements VehiculosService {
 					throw new Exception("No esta autorizado a ingresar este dia");
 				}
 			}
+			
+			Optional<Vehiculo> vehiculoExistente = vehiculoRepository.findById(vehiculo.getPlaca());
+			if (vehiculoExistente.isPresent()) {
+				if(vehiculoExistente.get().isEstado() == true) {
+					throw new Exception("El vehiculo ya se encuentra en el parqueadero");
+				}
+			}
+			vehiculo.setEstado(true);
+			
+			//Guardar historico
+			HistoricoIngresos historico = new HistoricoIngresos();
+			historico.setFechaIngreso(vehiculo.getFechaIngreso());
+			historico.setPlaca(vehiculo.getPlaca());
+			historicoIngresosRepository.save(historico);
+			
 			return vehiculoRepository.save(vehiculo);
 		} catch (Exception e) {
 			throw e;
@@ -50,22 +70,22 @@ public class VehiculosServiceImp implements VehiculosService {
 	}
 
 	@Override
-	public Optional<Vehiculo> consultarVehiculo(String placa) {
+	public Optional<Vehiculo> consultarVehiculo(String placa) throws Exception{
 		return vehiculoRepository.findById(placa);
 	}
 
 	@Override
-	public Vehiculo modificarVehiculo(Vehiculo vehiculo) {
+	public Vehiculo modificarVehiculo(Vehiculo vehiculo) throws Exception{
 		return vehiculoRepository.save(vehiculo);
 	}
 
 	@Override
-	public void eliminarVehiculo(String placa) {
+	public void eliminarVehiculo(String placa) throws Exception{
 		vehiculoRepository.deleteById(placa);
 	}
 
 	@Override
-	public List<Vehiculo> listarVehidulos() {
+	public List<Vehiculo> listarVehidulos() throws Exception {
 		return vehiculoRepository.findAll();
 	}
 
@@ -97,7 +117,7 @@ public class VehiculosServiceImp implements VehiculosService {
 			return hayCupo;
 		} catch (Exception e) {
 			LOGGER.info(" -------------------- Error en verificarCapacidad: " + e);
-			return false;
+			throw e;
 		}
 	}
 
@@ -111,9 +131,8 @@ public class VehiculosServiceImp implements VehiculosService {
 	}
 
 	@Override
-	public BigDecimal calcularTotalAPagar(String placa) {
+	public BigDecimal calcularTotalAPagar(String placa) throws Exception {
 		try {
-
 			BigDecimal totalAPagar = BigDecimal.ZERO;
 
 			Optional<Vehiculo> vehiculo = vehiculoRepository.findById(placa);
@@ -123,6 +142,7 @@ public class VehiculosServiceImp implements VehiculosService {
 
 			// Se actualiza la fecha de salida
 			vehiculo.get().setFechaSalida(LocalDateTime.now());
+			vehiculo.get().setEstado(false);
 			vehiculoRepository.save(vehiculo.get());
 
 			LocalDateTime fechaIngreso = vehiculo.get().getFechaIngreso();
@@ -172,11 +192,18 @@ public class VehiculosServiceImp implements VehiculosService {
 					}
 				}
 			}
+			
+			//Actualizar historico
+			HistoricoIngresos historico = historicoIngresosRepository.findByPlacaOrderByFechaIngresoDescfindTop1By1(vehiculo.get().getPlaca());
+			historico.setFechaSalida(vehiculo.get().getFechaSalida());
+			historico.setPrecio(totalAPagar);
+			historicoIngresosRepository.save(historico);
+			
 			return totalAPagar;
 
 		} catch (Exception e) {
 			LOGGER.info(" -------------------- Error en calcularTotalAPagar: " + e);
-			return null;
+			throw e;
 		}
 	}
 
