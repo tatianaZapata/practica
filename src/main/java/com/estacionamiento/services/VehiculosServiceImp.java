@@ -56,6 +56,7 @@ public class VehiculosServiceImp implements VehiculosService {
 				}
 			}
 			vehiculo.setEstado(true);
+			vehiculo = vehiculoRepository.save(vehiculo);
 			
 			//Guardar historico
 			HistoricoIngresos historico = new HistoricoIngresos();
@@ -63,7 +64,7 @@ public class VehiculosServiceImp implements VehiculosService {
 			historico.setPlaca(vehiculo.getPlaca());
 			historicoIngresosRepository.save(historico);
 			
-			return vehiculoRepository.save(vehiculo);
+			return vehiculo;
 		} catch (Exception e) {
 			throw e;
 		}
@@ -139,6 +140,10 @@ public class VehiculosServiceImp implements VehiculosService {
 			if (!vehiculo.isPresent()) {
 				throw new Exception("No existe un vehiculo con esa placa");
 			}
+			
+			if(vehiculo.get().isEstado()==false) {
+				throw new Exception("El vehiculo no se encuentra parqueado");
+			}
 
 			// Se actualiza la fecha de salida
 			vehiculo.get().setFechaSalida(LocalDateTime.now());
@@ -149,6 +154,10 @@ public class VehiculosServiceImp implements VehiculosService {
 			LocalDateTime fechaSalida = vehiculo.get().getFechaSalida();
 			Duration duracion = Duration.between(fechaIngreso, fechaSalida);
 			Long horasTranscurridas = duracion.toHours();
+			Long minutosDeMas = duracion.toMinutes();
+			if(minutosDeMas > 0) {
+				horasTranscurridas += 1;
+			}
 
 			if (vehiculo.get().getCodigoTipoVehiculo().equals(TipoDeVehiculo.CARRO.name())) {
 				if (horasTranscurridas < 9) {
@@ -170,26 +179,19 @@ public class VehiculosServiceImp implements VehiculosService {
 				if (horasTranscurridas < 9) {
 					// Cobrar por horas
 					totalAPagar = new BigDecimal(horasTranscurridas).multiply(Constants.VALOR_HORA_MOTO);
-					if (vehiculo.get().getCilindraje() > 500) {
-						totalAPagar = totalAPagar.add(new BigDecimal(2000));
-					}
 				} else if (horasTranscurridas >= 9 && horasTranscurridas <= 24) {
 					// Cobrar por dia
 					totalAPagar = Constants.VALOR_DIA_MOTO;
-					if (vehiculo.get().getCilindraje() > 500) {
-						totalAPagar = totalAPagar.add(new BigDecimal(2000));
-					}
 				} else {
 					// Calcular dias y horas
-					BigDecimal cantidadDias = new BigDecimal(horasTranscurridas).divide(new BigDecimal(24), 0,
-							RoundingMode.HALF_UP);
+					BigDecimal cantidadDias = new BigDecimal(horasTranscurridas).divide(new BigDecimal(24), 0, RoundingMode.HALF_UP);
 					BigDecimal cantidadHoras = new BigDecimal(horasTranscurridas).remainder(new BigDecimal(24));
 					BigDecimal totalValorDias = cantidadDias.multiply(Constants.VALOR_DIA_MOTO);
 					BigDecimal totalValorHoras = cantidadHoras.multiply(Constants.VALOR_HORA_MOTO);
 					totalAPagar = totalValorDias.add(totalValorHoras);
-					if (vehiculo.get().getCilindraje() > 500) {
-						totalAPagar = totalAPagar.add(new BigDecimal(2000));
-					}
+				}
+				if (vehiculo.get().getCilindraje() > 500) {
+					totalAPagar = totalAPagar.add(new BigDecimal(2000));
 				}
 			}
 			
