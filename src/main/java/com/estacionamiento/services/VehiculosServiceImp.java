@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.estacionamiento.constants.Constants;
 import com.estacionamiento.controllers.VehiculosController;
+import com.estacionamiento.dto.TotalAPagarDTO;
 import com.estacionamiento.models.HistoricoIngresos;
 import com.estacionamiento.models.TipoVehiculo.TipoDeVehiculo;
 import com.estacionamiento.models.Vehiculo;
@@ -56,6 +57,7 @@ public class VehiculosServiceImp implements VehiculosService {
 				}
 			}
 			vehiculo.setEstado(true);
+			vehiculo.setFechaIngreso(LocalDateTime.now());
 			vehiculo = vehiculoRepository.save(vehiculo);
 			
 			//Guardar historico
@@ -132,30 +134,30 @@ public class VehiculosServiceImp implements VehiculosService {
 	}
 
 	@Override
-	public BigDecimal calcularTotalAPagar(String placa) throws Exception {
+	public TotalAPagarDTO calcularTotalAPagar(String placa) throws Exception {
+		BigDecimal totalAPagar = BigDecimal.ZERO;
 		try {
-			BigDecimal totalAPagar = BigDecimal.ZERO;
-
 			Optional<Vehiculo> vehiculo = vehiculoRepository.findById(placa);
 			if (!vehiculo.isPresent()) {
 				throw new Exception("No existe un vehiculo con esa placa");
 			}
-			
-			if(vehiculo.get().isEstado()==false) {
+
+			if (vehiculo.get().isEstado() == false) {
 				throw new Exception("El vehiculo no se encuentra parqueado");
 			}
 
 			// Se actualiza la fecha de salida
 			vehiculo.get().setFechaSalida(LocalDateTime.now());
 			vehiculo.get().setEstado(false);
-			vehiculoRepository.save(vehiculo.get());
 
 			LocalDateTime fechaIngreso = vehiculo.get().getFechaIngreso();
 			LocalDateTime fechaSalida = vehiculo.get().getFechaSalida();
 			Duration duracion = Duration.between(fechaIngreso, fechaSalida);
-			Long horasTranscurridas = duracion.toHours();
-			Long minutosDeMas = duracion.toMinutes();
-			if(minutosDeMas > 0) {
+			Long minutosTranscurridos = duracion.toMinutes();
+			Double tiempoTranscurrido = minutosTranscurridos / 60D;
+			Integer horasTranscurridas = tiempoTranscurrido.intValue();
+			boolean sumarMinutos = (tiempoTranscurrido > horasTranscurridas) ? true : false;
+			if(sumarMinutos) {
 				horasTranscurridas += 1;
 			}
 
@@ -184,7 +186,8 @@ public class VehiculosServiceImp implements VehiculosService {
 					totalAPagar = Constants.VALOR_DIA_MOTO;
 				} else {
 					// Calcular dias y horas
-					BigDecimal cantidadDias = new BigDecimal(horasTranscurridas).divide(new BigDecimal(24), 0, RoundingMode.HALF_UP);
+					BigDecimal cantidadDias = new BigDecimal(horasTranscurridas).divide(new BigDecimal(24), 0,
+							RoundingMode.HALF_UP);
 					BigDecimal cantidadHoras = new BigDecimal(horasTranscurridas).remainder(new BigDecimal(24));
 					BigDecimal totalValorDias = cantidadDias.multiply(Constants.VALOR_DIA_MOTO);
 					BigDecimal totalValorHoras = cantidadHoras.multiply(Constants.VALOR_HORA_MOTO);
@@ -194,14 +197,14 @@ public class VehiculosServiceImp implements VehiculosService {
 					totalAPagar = totalAPagar.add(new BigDecimal(2000));
 				}
 			}
-			
-			//Actualizar historico
-			HistoricoIngresos historico = historicoIngresosRepository.findTop1ByPlacaOrderByFechaIngresoDesc(vehiculo.get().getPlaca());
+
+			// Actualizar historico
+			HistoricoIngresos historico = historicoIngresosRepository
+					.findTop1ByPlacaOrderByFechaIngresoDesc(vehiculo.get().getPlaca());
 			historico.setFechaSalida(vehiculo.get().getFechaSalida());
 			historico.setPrecio(totalAPagar);
-			historicoIngresosRepository.save(historico);
 			
-			return totalAPagar;
+			return new TotalAPagarDTO(totalAPagar, placa, horasTranscurridas);
 
 		} catch (Exception e) {
 			LOGGER.info(" -------------------- Error en calcularTotalAPagar: " + e);

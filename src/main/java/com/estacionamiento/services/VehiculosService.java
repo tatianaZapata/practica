@@ -1,9 +1,9 @@
 package com.estacionamiento.services;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import com.estacionamiento.dto.TotalAPagarDTO;
 import com.estacionamiento.models.Vehiculo;
 
 public interface VehiculosService {
@@ -18,6 +18,6 @@ public interface VehiculosService {
 	
 	List<Vehiculo> listarVehidulos () throws Exception;
 	
-	BigDecimal calcularTotalAPagar (String placa) throws Exception;
+	TotalAPagarDTO calcularTotalAPagar (String placa) throws Exception;
 
 }
