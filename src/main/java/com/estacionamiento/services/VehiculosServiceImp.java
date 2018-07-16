@@ -58,7 +58,7 @@ public class VehiculosServiceImp implements VehiculosService {
 			}
 			vehiculo.setEstado(true);
 			vehiculo.setFechaIngreso(LocalDateTime.now());
-			vehiculo = vehiculoRepository.save(vehiculo);
+			vehiculoRepository.save(vehiculo);
 			
 			//Guardar historico
 			HistoricoIngresos historico = new HistoricoIngresos();

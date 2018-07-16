@@ -2,6 +2,8 @@ package com.estacionamiento;
 
 import static org.junit.Assert.assertEquals;
 import java.text.ParseException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import javax.transaction.Transactional;
 import org.junit.Before;
 import org.junit.Test;
@@ -72,12 +74,28 @@ public class VehiculoValidacionesTest {
 	@Test
 	public void ProbarParqueaderoConEspacioParaMotos() throws ParseException{
 		//Arrange
-			Vehiculo vehiculo = new VehiculoTestDataBuilder().withCodigoTipoVehiculo("MOTO").build();
 			boolean hayCapacidad;
+			Vehiculo vehiculo = new VehiculoTestDataBuilder().withCodigoTipoVehiculo("MOTO").build();
 			Mockito.when(vehiculoRepository.contarPorTipoVehiculo(vehiculo.getCodigoTipoVehiculo())).thenReturn(9);
 		//Act
 			hayCapacidad = vehiculosServiceImp.verificarCapacidad(vehiculo);
 		//Assert
 			assertEquals(true, hayCapacidad);
 	}
+	
+	@Test
+	public void ProbarDiaPermitido() throws ParseException{
+		//Arrange
+			boolean diaPermitidoMetodo;
+			boolean diaPermitido = false;
+			DayOfWeek diaSemana = LocalDate.now().getDayOfWeek();
+			if (diaSemana.equals(DayOfWeek.SUNDAY) || diaSemana.equals(DayOfWeek.MONDAY)) {
+				diaPermitido = true;
+			}
+		//Act
+			diaPermitidoMetodo = vehiculosServiceImp.validarDia();
+		//Assert
+			assertEquals(diaPermitido, diaPermitidoMetodo);
+	}
+	
 }

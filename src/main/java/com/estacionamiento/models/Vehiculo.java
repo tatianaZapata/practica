@@ -102,4 +102,20 @@ public class Vehiculo {
 		this.fechaIngreso = fechaIngreso;
 	}
 
+	public Vehiculo(String placa, @NotNull Integer cilindraje, @NotNull String codigoTipoVehiculo,
+			@NotNull LocalDateTime fechaIngreso, LocalDateTime fechaSalida, boolean estado, TipoVehiculo tipoVehiculo) {
+		super();
+		this.placa = placa;
+		this.cilindraje = cilindraje;
+		this.codigoTipoVehiculo = codigoTipoVehiculo;
+		this.fechaIngreso = fechaIngreso;
+		this.fechaSalida = fechaSalida;
+		this.estado = estado;
+		this.tipoVehiculo = tipoVehiculo;
+	}
+
+	public Vehiculo() {
+		super();
+	}
+	
 }
