@@ -96,20 +96,20 @@ public class VehiculosServiceImp implements VehiculosService {
 		return vehiculoRepository.findByFechaIngreso(LocalDateTime.now());
 	}
 
-	private boolean verificarCapacidad(Vehiculo vehiculo) {
+	public boolean verificarCapacidad(Vehiculo vehiculo) {
 		try {
 			boolean hayCupo = false;
 			Integer quantity = 0;
 
 			switch (vehiculo.getCodigoTipoVehiculo()) {
 			case "CARRO":
-				quantity = vehiculoRepository.findByCodigoTipoVehiculo(TipoDeVehiculo.CARRO.name()).size();
+				quantity = vehiculoRepository.contarPorTipoVehiculo(TipoDeVehiculo.CARRO.name());
 				if (quantity < 20)
 					hayCupo = true;
 				break;
 
 			case "MOTO":
-				quantity = vehiculoRepository.findByCodigoTipoVehiculo(TipoDeVehiculo.MOTO.name()).size();
+				quantity = vehiculoRepository.contarPorTipoVehiculo(TipoDeVehiculo.MOTO.name());
 				if (quantity < 10)
 					hayCupo = true;
 				break;
@@ -124,7 +124,7 @@ public class VehiculosServiceImp implements VehiculosService {
 		}
 	}
 
-	private boolean validarDia() {
+	public boolean validarDia() {
 		boolean diaValido = false;
 		DayOfWeek diaSemana = LocalDate.now().getDayOfWeek();
 		if (diaSemana.equals(DayOfWeek.SUNDAY) || diaSemana.equals(DayOfWeek.MONDAY)) {
@@ -199,8 +199,7 @@ public class VehiculosServiceImp implements VehiculosService {
 			}
 
 			// Actualizar historico
-			HistoricoIngresos historico = historicoIngresosRepository
-					.findTop1ByPlacaOrderByFechaIngresoDesc(vehiculo.get().getPlaca());
+			HistoricoIngresos historico = historicoIngresosRepository.findTop1ByPlacaOrderByFechaIngresoDesc(vehiculo.get().getPlaca());
 			historico.setFechaSalida(vehiculo.get().getFechaSalida());
 			historico.setPrecio(totalAPagar);
 			

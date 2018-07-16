@@ -94,6 +94,12 @@ public class Vehiculo {
 		this.estado = estado;
 	}
 
-	
-	
+	public Vehiculo(String placa, @NotNull Integer cilindraje, @NotNull String codigoTipoVehiculo,
+			@NotNull LocalDateTime fechaIngreso) {
+		this.placa = placa;
+		this.cilindraje = cilindraje;
+		this.codigoTipoVehiculo = codigoTipoVehiculo;
+		this.fechaIngreso = fechaIngreso;
+	}
+
 }
