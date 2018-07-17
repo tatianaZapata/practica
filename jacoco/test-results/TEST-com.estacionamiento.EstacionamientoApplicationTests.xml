@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.estacionamiento.EstacionamientoApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-07-16T23:43:32" hostname="TATIANA-ZAPATA" time="0.002">
+<testsuite name="com.estacionamiento.EstacionamientoApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-07-17T15:37:23" hostname="TATIANA-ZAPATA" time="0.002">
   <properties/>
   <testcase name="contextLoads" classname="com.estacionamiento.EstacionamientoApplicationTests" time="0.002"/>
   <system-out><![CDATA[]]></system-out>

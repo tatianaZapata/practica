@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 import com.estacionamiento.constants.Constants;
 import com.estacionamiento.controllers.VehiculosController;
 import com.estacionamiento.dto.TotalAPagarDTO;
+import com.estacionamiento.excepciones.DiaNoPermitido;
+import com.estacionamiento.excepciones.ParqueaderoLleno;
+import com.estacionamiento.excepciones.VehiculoNoExiste;
+import com.estacionamiento.excepciones.VehiculoYaExiste;
 import com.estacionamiento.models.HistoricoIngresos;
 import com.estacionamiento.models.TipoVehiculo.TipoDeVehiculo;
 import com.estacionamiento.models.Vehiculo;
@@ -39,21 +43,19 @@ public class VehiculosServiceImp implements VehiculosService {
 			boolean hayCupo = verificarCapacidad(vehiculo);
 	
 			if (!hayCupo) {
-				LOGGER.info("No hay cupo");
-				throw new Exception("No hay cupo");
+				throw new ParqueaderoLleno("El parqueadero se encuentra lleno");
 			}
 			if (vehiculo.getPlaca().startsWith("A") || vehiculo.getPlaca().startsWith("a")) {
 				boolean diaPermitido = validarDia();
 				if (!diaPermitido) {
-					LOGGER.info("No esta autorizado a ingresar este dia");
-					throw new Exception("No esta autorizado a ingresar este dia");
+					throw new DiaNoPermitido("No esta autorizado a ingresar este dia");
 				}
 			}
 			
 			Optional<Vehiculo> vehiculoExistente = vehiculoRepository.findById(vehiculo.getPlaca());
 			if (vehiculoExistente.isPresent()) {
 				if(vehiculoExistente.get().isEstado() == true) {
-					throw new Exception("El vehiculo ya se encuentra en el parqueadero");
+					throw new VehiculoYaExiste("El vehiculo ya se encuentra en el parqueadero");
 				}
 			}
 			vehiculo.setEstado(true);
@@ -139,11 +141,11 @@ public class VehiculosServiceImp implements VehiculosService {
 		try {
 			Optional<Vehiculo> vehiculo = vehiculoRepository.findById(placa);
 			if (!vehiculo.isPresent()) {
-				throw new Exception("No existe un vehiculo con esa placa");
+				throw new VehiculoNoExiste("No existe un vehiculo con esa placa");
 			}
 
 			if (vehiculo.get().isEstado() == false) {
-				throw new Exception("El vehiculo no se encuentra parqueado");
+				throw new VehiculoNoExiste("El vehiculo no se encuentra parqueado");
 			}
 
 			// Se actualiza la fecha de salida

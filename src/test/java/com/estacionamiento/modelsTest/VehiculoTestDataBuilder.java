@@ -40,7 +40,7 @@ public class VehiculoTestDataBuilder {
 	}
 	
 	public Vehiculo build() {
-		return new Vehiculo(placa, cilindraje, codigoTipoVehiculo, fechaIngreso);
+		return new Vehiculo(placa, cilindraje, codigoTipoVehiculo, fechaIngreso, null, false, null);
 	}
 	
 }
