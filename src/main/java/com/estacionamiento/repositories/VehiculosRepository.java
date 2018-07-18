@@ -21,7 +21,6 @@ public interface VehiculosRepository extends JpaRepository<Vehiculo, String>{
 	@Query(value = "Select count(*) from vehiculo where estado = 1 and fk_tipo_vehiculo = :tipoVehiculo", nativeQuery = true)
 	Integer contarPorTipoVehiculo(@Param("tipoVehiculo") String tipoVehiculo);
 	
-//	@Query(value = "SELECT * FROM vehiculos veh INNER JOIN tipo_vehiculo tip ON veh.fk_tipo_vehiculo = tip.id_tipo WHERE tip.descripcion = 'moto';", nativeQuery=true)
-//    public List<Vehiculos> findByMoto();
+	List<Vehiculo> findByEstado(@Param("estado") boolean estado);
 
 }

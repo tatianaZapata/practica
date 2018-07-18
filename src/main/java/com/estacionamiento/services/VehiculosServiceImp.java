@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.estacionamiento.constants.Constants;
 import com.estacionamiento.controllers.VehiculosController;
 import com.estacionamiento.dto.TotalAPagarDTO;
+import com.estacionamiento.excepciones.CampoObligatorio;
 import com.estacionamiento.excepciones.DiaNoPermitido;
 import com.estacionamiento.excepciones.ParqueaderoLleno;
 import com.estacionamiento.excepciones.VehiculoNoExiste;
@@ -40,6 +41,7 @@ public class VehiculosServiceImp implements VehiculosService {
 	@Override
 	public Vehiculo crearVehiculo(Vehiculo vehiculo) throws Exception {
 		try {
+			boolean camposCompletos = validarCampos(vehiculo);
 			boolean hayCupo = verificarCapacidad(vehiculo);
 	
 			if (!hayCupo) {
@@ -91,7 +93,7 @@ public class VehiculosServiceImp implements VehiculosService {
 
 	@Override
 	public List<Vehiculo> listarVehidulos() throws Exception {
-		return vehiculoRepository.findAll();
+		return vehiculoRepository.findByEstado(true);
 	}
 
 	public List<Vehiculo> listarIngresosDia() {
@@ -172,7 +174,7 @@ public class VehiculosServiceImp implements VehiculosService {
 					totalAPagar = Constants.VALOR_DIA_CARRO;
 				} else {
 					// Calcular dias y horas
-					BigDecimal cantidadDias = new BigDecimal(horasTranscurridas).divide(new BigDecimal(24));
+					BigDecimal cantidadDias = new BigDecimal(horasTranscurridas).divide(new BigDecimal(24), 0, RoundingMode.HALF_UP);
 					BigDecimal cantidadHoras = new BigDecimal(horasTranscurridas).remainder(new BigDecimal(24));
 					BigDecimal totalValorDias = cantidadDias.multiply(Constants.VALOR_DIA_CARRO);
 					BigDecimal totalValorHoras = cantidadHoras.multiply(Constants.VALOR_HORA_CARRO);
@@ -188,8 +190,7 @@ public class VehiculosServiceImp implements VehiculosService {
 					totalAPagar = Constants.VALOR_DIA_MOTO;
 				} else {
 					// Calcular dias y horas
-					BigDecimal cantidadDias = new BigDecimal(horasTranscurridas).divide(new BigDecimal(24), 0,
-							RoundingMode.HALF_UP);
+					BigDecimal cantidadDias = new BigDecimal(horasTranscurridas).divide(new BigDecimal(24), 0, RoundingMode.HALF_UP);
 					BigDecimal cantidadHoras = new BigDecimal(horasTranscurridas).remainder(new BigDecimal(24));
 					BigDecimal totalValorDias = cantidadDias.multiply(Constants.VALOR_DIA_MOTO);
 					BigDecimal totalValorHoras = cantidadHoras.multiply(Constants.VALOR_HORA_MOTO);
@@ -211,6 +212,20 @@ public class VehiculosServiceImp implements VehiculosService {
 			LOGGER.info(" -------------------- Error en calcularTotalAPagar: " + e);
 			throw e;
 		}
+	}
+	
+	public boolean validarCampos(Vehiculo vehiculo) {
+		boolean camposCompletos = false;
+		if(vehiculo.getPlaca() == null || vehiculo.getPlaca().isEmpty()) {
+			throw new CampoObligatorio("La placa del vehiculo es obligatoria");
+		}
+		if(vehiculo.getCilindraje() == null) {
+			throw new CampoObligatorio("El cilindraje del vehiculo es obligatorio");
+		}
+		if(vehiculo.getCodigoTipoVehiculo() == null || vehiculo.getCodigoTipoVehiculo().isEmpty()) {
+			throw new CampoObligatorio("El tipo de vehiculo es obligatorio");
+		}
+		return camposCompletos;
 	}
 
 }
