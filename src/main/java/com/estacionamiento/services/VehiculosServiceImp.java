@@ -42,7 +42,7 @@ public class VehiculosServiceImp implements VehiculosService {
 	@Override
 	public Vehiculo crearVehiculo(Vehiculo vehiculo) throws Exception {
 		try {
-			boolean camposCompletos = validarCampos(vehiculo);
+			validarCampos(vehiculo);
 			boolean hayCupo = verificarCapacidad(vehiculo);
 	
 			if (!hayCupo) {
@@ -57,7 +57,7 @@ public class VehiculosServiceImp implements VehiculosService {
 			
 			Optional<Vehiculo> vehiculoExistente = vehiculoRepository.findById(vehiculo.getPlaca());
 			if (vehiculoExistente.isPresent()) {
-				if(vehiculoExistente.get().isEstado() == true) {
+				if(vehiculoExistente.get().isEstado()) {
 					throw new VehiculoYaExiste("El vehiculo ya se encuentra en el parqueadero");
 				}
 			}
