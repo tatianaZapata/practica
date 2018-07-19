@@ -17,6 +17,7 @@ import com.estacionamiento.controllers.VehiculosController;
 import com.estacionamiento.dto.TotalAPagarDTO;
 import com.estacionamiento.excepciones.CampoObligatorio;
 import com.estacionamiento.excepciones.DiaNoPermitido;
+import com.estacionamiento.excepciones.InternalException;
 import com.estacionamiento.excepciones.ParqueaderoLleno;
 import com.estacionamiento.excepciones.VehiculoNoExiste;
 import com.estacionamiento.excepciones.VehiculoYaExiste;
@@ -202,7 +203,10 @@ public class VehiculosServiceImp implements VehiculosService {
 			}
 
 			// Actualizar historico
-			HistoricoIngresos historico = historicoIngresosRepository.findTop1ByPlacaOrderByFechaIngresoDesc(vehiculo.get().getPlaca());
+			HistoricoIngresos historico = historicoIngresosRepository
+					.findTop1ByPlacaOrderByFechaIngresoDesc(vehiculo.get().getPlaca())
+					.orElseThrow(() -> new InternalException("El vehículo no se encuentra en la tabla de históricos"));
+			
 			historico.setFechaSalida(vehiculo.get().getFechaSalida());
 			historico.setPrecio(totalAPagar);
 			
