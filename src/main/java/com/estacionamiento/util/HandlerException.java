@@ -29,7 +29,7 @@ public class HandlerException {
 
 	@ExceptionHandler({ VehiculoYaExiste.class })
 	public ResponseEntity<Object> vehiculoYaExiste(Exception ex, WebRequest request) {
-		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.ALREADY_REPORTED);
+		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
 	}
 	
 	@ExceptionHandler({ VehiculoNoExiste.class })

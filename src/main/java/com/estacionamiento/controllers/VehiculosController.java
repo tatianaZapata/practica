@@ -33,7 +33,7 @@ public class VehiculosController {
 
 	@GetMapping("/vehiculos")
 	public ResponseEntity<List<Vehiculo>> listarVehidulos () throws Exception{
-		return new ResponseEntity<>(vehiculoService.listarVehidulos(), HttpStatus.OK);
+ 		return new ResponseEntity<>(vehiculoService.listarVehidulos(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/vehiculos/{placa}")

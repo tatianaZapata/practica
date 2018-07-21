@@ -51,15 +51,13 @@ public class VehiculosServiceImp implements VehiculosService {
 			if (vehiculo.getPlaca().startsWith("A") || vehiculo.getPlaca().startsWith("a")) {
 				boolean diaPermitido = validarDia();
 				if (!diaPermitido) {
-					throw new DiaNoPermitido("No esta autorizado a ingresar este dia");
+					throw new DiaNoPermitido("No esta autorizado a ingresar este día");
 				}
 			}
 			
 			Optional<Vehiculo> vehiculoExistente = vehiculoRepository.findById(vehiculo.getPlaca());
-			if (vehiculoExistente.isPresent()) {
-				if(vehiculoExistente.get().isEstado()) {
-					throw new VehiculoYaExiste("El vehiculo ya se encuentra en el parqueadero");
-				}
+			if (vehiculoExistente.isPresent() && vehiculoExistente.get().isEstado()) {
+				throw new VehiculoYaExiste("El vehículo ya se encuentra en el parqueadero");
 			}
 			vehiculo.setEstado(true);
 			vehiculo.setFechaIngreso(LocalDateTime.now());
