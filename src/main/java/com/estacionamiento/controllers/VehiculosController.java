@@ -58,6 +58,6 @@ public class VehiculosController {
 	
 	@PutMapping("/salir/{placa}")
 	public TotalAPagarDTO salirDeEstacionamiento (@PathVariable String placa) throws Exception{
-		return vehiculoService.calcularTotalAPagar(placa);
+		return vehiculoService.salirDeEstacionamiento(placa);
 	}
 }

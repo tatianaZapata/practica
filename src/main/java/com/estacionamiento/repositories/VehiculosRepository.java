@@ -1,6 +1,5 @@
 package com.estacionamiento.repositories;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,8 +9,6 @@ import com.estacionamiento.models.Vehiculo;
 
 @Repository
 public interface VehiculosRepository extends JpaRepository<Vehiculo, String>{
-
-	List<Vehiculo> findByFechaIngreso(LocalDateTime fechaIngreso);
 	
 	@Query("SELECT v FROM Vehiculo v JOIN FETCH v.tipoVehiculo tipoveh WHERE tipoveh.descripcion = :tipoVehiculo")
     List<Vehiculo> findByTipo(@Param("tipoVehiculo") String tipoVehiculo);

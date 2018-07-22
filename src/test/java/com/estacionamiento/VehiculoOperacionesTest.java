@@ -52,7 +52,7 @@ public class VehiculoOperacionesTest {
 			TotalAPagarDTO totalDTO;
 		//Act
 			vehiculosServiceImp.crearVehiculo(vehiculo);
-			totalDTO = vehiculosServiceImp.calcularTotalAPagar(vehiculo.getPlaca());
+			totalDTO = vehiculosServiceImp.salirDeEstacionamiento(vehiculo.getPlaca());
 		//Assert
 			assertNotNull(totalDTO.getTotalPagar());
 		} catch (Exception e) {

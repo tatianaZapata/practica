@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.estacionamiento.EstacionamientoApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-07-17T15:37:23" hostname="TATIANA-ZAPATA" time="0.002">
+<testsuite name="com.estacionamiento.EstacionamientoApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-07-22T02:42:28" hostname="DESKTOP-UVI7B2K" time="0.001">
   <properties/>
-  <testcase name="contextLoads" classname="com.estacionamiento.EstacionamientoApplicationTests" time="0.002"/>
+  <testcase name="contextLoads" classname="com.estacionamiento.EstacionamientoApplicationTests" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

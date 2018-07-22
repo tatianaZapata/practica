@@ -9,9 +9,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.estacionamiento.constants.Constants;
 import com.estacionamiento.controllers.VehiculosController;
 import com.estacionamiento.dto.TotalAPagarDTO;
@@ -21,9 +24,11 @@ import com.estacionamiento.excepciones.InternalException;
 import com.estacionamiento.excepciones.ParqueaderoLleno;
 import com.estacionamiento.excepciones.VehiculoNoExiste;
 import com.estacionamiento.excepciones.VehiculoYaExiste;
+import com.estacionamiento.factory.PrecioFabrica;
 import com.estacionamiento.models.HistoricoIngresos;
 import com.estacionamiento.models.TipoVehiculo.TipoDeVehiculo;
 import com.estacionamiento.models.Vehiculo;
+import com.estacionamiento.precios.Precio;
 import com.estacionamiento.repositories.HistoricoIngresosRepository;
 import com.estacionamiento.repositories.VehiculosRepository;
 
@@ -44,11 +49,11 @@ public class VehiculosServiceImp implements VehiculosService {
 		try {
 			validarCampos(vehiculo);
 			boolean hayCupo = verificarCapacidad(vehiculo);
-	
 			if (!hayCupo) {
 				throw new ParqueaderoLleno("El parqueadero se encuentra lleno");
 			}
-			if (vehiculo.getPlaca().startsWith("A") || vehiculo.getPlaca().startsWith("a")) {
+			boolean placaIniciaPorA = verificarPlacaA(vehiculo.getPlaca());
+			if (placaIniciaPorA) {
 				boolean diaPermitido = validarDia();
 				if (!diaPermitido) {
 					throw new DiaNoPermitido("No esta autorizado a ingresar este día");
@@ -60,12 +65,11 @@ public class VehiculosServiceImp implements VehiculosService {
 				throw new VehiculoYaExiste("El vehículo ya se encuentra en el parqueadero");
 			}
 			vehiculo.setEstado(true);
-			vehiculo.setFechaIngreso(LocalDateTime.now());
 			vehiculoRepository.save(vehiculo);
 			
 			//Guardar historico
 			HistoricoIngresos historico = new HistoricoIngresos();
-			historico.setFechaIngreso(vehiculo.getFechaIngreso());
+			historico.setFechaIngreso(LocalDateTime.now());
 			historico.setPlaca(vehiculo.getPlaca());
 			historicoIngresosRepository.save(historico);
 			
@@ -93,10 +97,6 @@ public class VehiculosServiceImp implements VehiculosService {
 	@Override
 	public List<Vehiculo> listarVehidulos() throws Exception {
 		return vehiculoRepository.findByEstado(true);
-	}
-
-	public List<Vehiculo> listarIngresosDia() {
-		return vehiculoRepository.findByFechaIngreso(LocalDateTime.now());
 	}
 
 	public boolean verificarCapacidad(Vehiculo vehiculo) {
@@ -137,75 +137,48 @@ public class VehiculosServiceImp implements VehiculosService {
 	}
 
 	@Override
-	public TotalAPagarDTO calcularTotalAPagar(String placa) throws Exception {
+	public TotalAPagarDTO salirDeEstacionamiento(String placa) throws Exception {
 		BigDecimal totalAPagar = BigDecimal.ZERO;
 		try {
 			Optional<Vehiculo> vehiculo = vehiculoRepository.findById(placa);
 			if (!vehiculo.isPresent()) {
 				throw new VehiculoNoExiste("No existe un vehiculo con esa placa");
 			}
-
 			if (vehiculo.get().isEstado() == false) {
 				throw new VehiculoNoExiste("El vehiculo no se encuentra parqueado");
 			}
-
-			// Se actualiza la fecha de salida
-			vehiculo.get().setFechaSalida(LocalDateTime.now());
 			vehiculo.get().setEstado(false);
-
-			LocalDateTime fechaIngreso = vehiculo.get().getFechaIngreso();
-			LocalDateTime fechaSalida = vehiculo.get().getFechaSalida();
-			Duration duracion = Duration.between(fechaIngreso, fechaSalida);
-			Long minutosTranscurridos = duracion.toMinutes();
-			Double tiempoTranscurrido = minutosTranscurridos / 60D;
-			Integer horasTranscurridas = tiempoTranscurrido.intValue();
-			boolean sumarMinutos = (tiempoTranscurrido > horasTranscurridas) ? true : false;
-			if(sumarMinutos) {
-				horasTranscurridas += 1;
-			}
-
-			if (vehiculo.get().getCodigoTipoVehiculo().equals(TipoDeVehiculo.CARRO.name())) {
-				if (horasTranscurridas < 9) {
-					// Cobrar por horas
-					totalAPagar = new BigDecimal(horasTranscurridas).multiply(Constants.VALOR_HORA_CARRO);
-				} else if (horasTranscurridas >= 9 && horasTranscurridas <= 24) {
-					// Cobrar por dia
-					totalAPagar = Constants.VALOR_DIA_CARRO;
-				} else {
-					// Calcular dias y horas
-					BigDecimal cantidadDias = new BigDecimal(horasTranscurridas).divide(new BigDecimal(24), 0, RoundingMode.HALF_UP);
-					BigDecimal cantidadHoras = new BigDecimal(horasTranscurridas).remainder(new BigDecimal(24));
-					BigDecimal totalValorDias = cantidadDias.multiply(Constants.VALOR_DIA_CARRO);
-					BigDecimal totalValorHoras = cantidadHoras.multiply(Constants.VALOR_HORA_CARRO);
-					totalAPagar = totalValorDias.add(totalValorHoras);
-				}
-
-			} else if (vehiculo.get().getCodigoTipoVehiculo().equals(TipoDeVehiculo.MOTO.name())) {
-				if (horasTranscurridas < 9) {
-					// Cobrar por horas
-					totalAPagar = new BigDecimal(horasTranscurridas).multiply(Constants.VALOR_HORA_MOTO);
-				} else if (horasTranscurridas >= 9 && horasTranscurridas <= 24) {
-					// Cobrar por dia
-					totalAPagar = Constants.VALOR_DIA_MOTO;
-				} else {
-					// Calcular dias y horas
-					BigDecimal cantidadDias = new BigDecimal(horasTranscurridas).divide(new BigDecimal(24), 0, RoundingMode.HALF_UP);
-					BigDecimal cantidadHoras = new BigDecimal(horasTranscurridas).remainder(new BigDecimal(24));
-					BigDecimal totalValorDias = cantidadDias.multiply(Constants.VALOR_DIA_MOTO);
-					BigDecimal totalValorHoras = cantidadHoras.multiply(Constants.VALOR_HORA_MOTO);
-					totalAPagar = totalValorDias.add(totalValorHoras);
-				}
-				if (vehiculo.get().getCilindraje() > 500) {
-					totalAPagar = totalAPagar.add(new BigDecimal(2000));
-				}
-			}
-
+			
 			// Actualizar historico
 			HistoricoIngresos historico = historicoIngresosRepository
 					.findTop1ByPlacaOrderByFechaIngresoDesc(vehiculo.get().getPlaca())
 					.orElseThrow(() -> new InternalException("El vehículo no se encuentra en la tabla de históricos"));
 			
-			historico.setFechaSalida(vehiculo.get().getFechaSalida());
+			historico.setFechaSalida(LocalDateTime.now());
+			Integer horasTranscurridas = calcularHorasTranscurrias(historico);
+
+			PrecioFabrica fabrica = new PrecioFabrica();
+			Precio precio = fabrica.getPrecio(vehiculo.get().getCodigoTipoVehiculo());
+			
+			if (horasTranscurridas < 9) {
+				// Cobrar por horas
+				totalAPagar = new BigDecimal(horasTranscurridas).multiply(precio.getValorHora());
+			} else if (horasTranscurridas >= 9 && horasTranscurridas <= 24) {
+				// Cobrar por dia
+				totalAPagar = precio.getValorDia();
+			} else {
+				// Calcular dias y horas
+				BigDecimal cantidadDias = new BigDecimal(horasTranscurridas).divide(new BigDecimal(24), 0, RoundingMode.HALF_UP);
+				BigDecimal cantidadHoras = new BigDecimal(horasTranscurridas).remainder(new BigDecimal(24));
+				BigDecimal totalValorDias = cantidadDias.multiply(precio.getValorDia());
+				BigDecimal totalValorHoras = cantidadHoras.multiply(precio.getValorHora());
+				totalAPagar = totalValorDias.add(totalValorHoras);
+			}
+
+			if(vehiculo.get().getCodigoTipoVehiculo().equals(TipoDeVehiculo.MOTO.name()) && vehiculo.get().getCilindraje() > 500) {
+				totalAPagar = totalAPagar.add(new BigDecimal(2000));
+			}
+			
 			historico.setPrecio(totalAPagar);
 			
 			return new TotalAPagarDTO(totalAPagar, placa, horasTranscurridas);
@@ -228,6 +201,29 @@ public class VehiculosServiceImp implements VehiculosService {
 			throw new CampoObligatorio("El tipo de vehiculo es obligatorio");
 		}
 		return camposCompletos;
+	}
+	
+	public boolean verificarPlacaA(String placa) {
+		boolean esPlacaA = false;
+		if (placa.toUpperCase().startsWith("A")) {
+			esPlacaA = true;
+		}
+		return esPlacaA;
+	}
+	
+	public Integer calcularHorasTranscurrias(HistoricoIngresos historico) {
+		Integer horasTranscurridas = 0;
+		LocalDateTime fechaIngreso = historico.getFechaIngreso();
+		LocalDateTime fechaSalida = historico.getFechaSalida();
+		Duration duracion = Duration.between(fechaIngreso, fechaSalida);
+		Long minutosTranscurridos = duracion.toMinutes();
+		Double tiempoTranscurrido = minutosTranscurridos / 60D;
+		horasTranscurridas = tiempoTranscurrido.intValue();
+		boolean sumarMinutos = (tiempoTranscurrido > horasTranscurridas) ? true : false;
+		if(sumarMinutos) {
+			horasTranscurridas += 1;
+		}
+		return horasTranscurridas;
 	}
 
 }

@@ -34,16 +34,16 @@ public class HandlerException {
 	
 	@ExceptionHandler({ VehiculoNoExiste.class })
 	public ResponseEntity<Object> vehiculoNoExiste(Exception ex, WebRequest request) {
-		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
 	}
 	
 	@ExceptionHandler({ CampoObligatorio.class })
 	public ResponseEntity<Object> campoObligatorio(Exception ex, WebRequest request) {
-		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
 	}
 	
 	@ExceptionHandler({ InternalException.class })
 	public ResponseEntity<Object> internalException(Exception ex, WebRequest request) {
-		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
 	}
 }

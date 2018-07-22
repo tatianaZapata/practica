@@ -24,13 +24,6 @@ public class Vehiculo {
 	@Column(name = "fk_tipo_vehiculo")
 	private String codigoTipoVehiculo;
 	
-	@NotNull
-	@Column(name = "fecha_ingreso")
-	private LocalDateTime fechaIngreso;
-	
-	@Column(name = "fecha_salida")
-	private LocalDateTime fechaSalida;
-	
 	@Column(name = "estado")
 	private boolean estado;
 	
@@ -62,22 +55,6 @@ public class Vehiculo {
 		this.codigoTipoVehiculo = codigoTipoVehiculo;
 	}
 
-	public LocalDateTime getFechaIngreso() {
-		return fechaIngreso;
-	}
-
-	public void setFechaIngreso(LocalDateTime fechaIngreso) {
-		this.fechaIngreso = fechaIngreso;
-	}
-
-	public LocalDateTime getFechaSalida() {
-		return fechaSalida;
-	}
-
-	public void setFechaSalida(LocalDateTime fechaSalida) {
-		this.fechaSalida = fechaSalida;
-	}
-
 	public TipoVehiculo getTipoVehiculo() {
 		return tipoVehiculo;
 	}
@@ -94,14 +71,11 @@ public class Vehiculo {
 		this.estado = estado;
 	}
 
-	public Vehiculo(String placa, @NotNull Integer cilindraje, @NotNull String codigoTipoVehiculo,
-			@NotNull LocalDateTime fechaIngreso, LocalDateTime fechaSalida, boolean estado, TipoVehiculo tipoVehiculo) {
+	public Vehiculo(String placa, @NotNull Integer cilindraje, @NotNull String codigoTipoVehiculo, boolean estado, TipoVehiculo tipoVehiculo) {
 		super();
 		this.placa = placa;
 		this.cilindraje = cilindraje;
 		this.codigoTipoVehiculo = codigoTipoVehiculo;
-		this.fechaIngreso = fechaIngreso;
-		this.fechaSalida = fechaSalida;
 		this.estado = estado;
 		this.tipoVehiculo = tipoVehiculo;
 	}

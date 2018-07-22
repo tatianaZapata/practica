@@ -18,6 +18,6 @@ public interface VehiculosService {
 	
 	List<Vehiculo> listarVehidulos () throws Exception;
 	
-	TotalAPagarDTO calcularTotalAPagar (String placa) throws Exception;
+	TotalAPagarDTO salirDeEstacionamiento (String placa) throws Exception;
 
 }
