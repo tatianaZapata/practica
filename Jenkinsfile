@@ -39,7 +39,7 @@ pipeline {
 		stage('Unit Tests') {
 			steps {
 				echo "------------>Unit Tests<------------"
-				junit 'jacoco/test-results/*.xml cleanTest test'
+				junit 'jacoco/test-results/*.xml'
 			}
 		
 		}
