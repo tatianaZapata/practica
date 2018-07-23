@@ -56,10 +56,9 @@ pipeline {
 				echo "STATIC CODE ANALYSIS"
 				withSonarQubeEnv('Sonar') {
 					sh "${tool name: 'SonarScanner',type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner -Dproject.settings=sonar-project.properties -Dsonar.organization=tatianaZapata-github  -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=3ad73a9e242f288887a5"
-				
 				}
 			}
-		
+		}
 		
 		stage('Build') {
 			steps {
@@ -67,11 +66,8 @@ pipeline {
 				sh 'gradle --b ./build.gradle build'
 
 			}
-		
 		}
 	}
-	
-	
 	
 	post {
 		always {
@@ -99,10 +95,5 @@ pipeline {
 			echo "Pipeline state has changed"
 		
 		}
-
-		
-	
 	}
-
-
 }
