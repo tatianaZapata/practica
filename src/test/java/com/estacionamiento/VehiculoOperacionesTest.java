@@ -1,5 +1,6 @@
 package com.estacionamiento;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import java.text.ParseException;
@@ -60,4 +61,16 @@ public class VehiculoOperacionesTest {
 		}
 	}
 
+	@Test
+	public void vehiculoNoExiste() {
+		try {
+		//Arrange
+			Vehiculo vehiculo = new VehiculoTestDataBuilder().withPlaca("000000").build();
+		//Act
+			vehiculosServiceImp.salirDeEstacionamiento(vehiculo.getPlaca());
+		} catch (Exception e) {
+			//Assert
+			assertEquals("No existe un vehiculo con esa placa", e.getMessage());
+		}
+	}
 }

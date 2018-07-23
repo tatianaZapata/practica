@@ -1,6 +1,8 @@
 package com.estacionamiento;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.text.ParseException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -96,6 +98,17 @@ public class VehiculoValidacionesTest {
 			diaPermitidoMetodo = vehiculosServiceImp.validarDia();
 		//Assert
 			assertEquals(diaPermitido, diaPermitidoMetodo);
+	}
+	
+	@Test
+	public void ValidarPlacaA() throws ParseException{
+		//Arrange
+			Boolean esPlacaA;
+			Vehiculo vehiculo = new VehiculoTestDataBuilder().withPlaca("ATT77E").build();
+		//Act
+			esPlacaA = vehiculosServiceImp.verificarPlacaA(vehiculo.getPlaca());
+		//Assert
+			assertTrue(esPlacaA);
 	}
 	
 }
