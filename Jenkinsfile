@@ -39,7 +39,7 @@ pipeline {
 		stage('Unit Tests') {
 			steps {
 				echo "------------>Unit Tests<------------"
-				sh 'gradle --b ./build.gradle cleanTest test'
+				junit 'jacoco/test-results/*.xml'
 			}
 		
 		}
@@ -81,7 +81,6 @@ pipeline {
 		success {
 			echo 'This will run only if successful'
 			junit 'build/test-results/*.xml'
-			jacoco 'jacoco/test-results/*.xml'
 		}
 		
 		failure {
