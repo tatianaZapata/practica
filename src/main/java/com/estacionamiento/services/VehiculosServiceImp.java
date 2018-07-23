@@ -56,13 +56,13 @@ public class VehiculosServiceImp implements VehiculosService {
 			if (placaIniciaPorA) {
 				boolean diaPermitido = validarDia();
 				if (!diaPermitido) {
-					throw new DiaNoPermitido("No esta autorizado a ingresar este día");
+					throw new DiaNoPermitido("No esta autorizado a ingresar este dia");
 				}
 			}
 			
 			Optional<Vehiculo> vehiculoExistente = vehiculoRepository.findById(vehiculo.getPlaca());
 			if (vehiculoExistente.isPresent() && vehiculoExistente.get().isEstado()) {
-				throw new VehiculoYaExiste("El vehículo ya se encuentra en el parqueadero");
+				throw new VehiculoYaExiste("El vehiculo ya se encuentra en el parqueadero");
 			}
 			vehiculo.setEstado(true);
 			vehiculo.setFechaIngreso(LocalDateTime.now());
@@ -153,7 +153,7 @@ public class VehiculosServiceImp implements VehiculosService {
 			// Actualizar historico
 			HistoricoIngresos historico = historicoIngresosRepository
 					.findTop1ByPlacaOrderByFechaIngresoDesc(vehiculo.get().getPlaca())
-					.orElseThrow(() -> new InternalException("El vehículo no se encuentra en la tabla de históricos"));
+					.orElseThrow(() -> new InternalException("El vehiculo no se encuentra en la tabla de historicos"));
 			
 			historico.setFechaSalida(LocalDateTime.now());
 			Integer horasTranscurridas = calcularHorasTranscurrias(historico);
