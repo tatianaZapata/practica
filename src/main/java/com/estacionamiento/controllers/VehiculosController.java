@@ -26,8 +26,6 @@ import com.estacionamiento.services.VehiculosService;
 @CrossOrigin("http://localhost:4200")
 public class VehiculosController {
 	
-	private static final Logger LOGGER = Logger.getLogger(VehiculosController.class.getName());
-	
 	@Autowired
 	private VehiculosService vehiculoService;
 
