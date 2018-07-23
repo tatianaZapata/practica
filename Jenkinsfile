@@ -55,7 +55,7 @@ pipeline {
 			steps {
 				echo "STATIC CODE ANALYSIS"
 				withSonarQubeEnv('Sonar') {
-					sh "${tool name: 'SonarScanner',type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner -Dproject.settings=sonar-project.properties -Dsonar.organization=tatianaZapata-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=82cd36244f8d4817229b194ae76cec1cc6c34f88"
+					sh "${tool name: 'SonarScanner',type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner -Dproject.settings=sonar-project.properties -Dsonar.organization=tatianazapata-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=d7baedb5a8a25300bed565ddd4a4fb72818be4c7"
 				}
 			}
 		}
