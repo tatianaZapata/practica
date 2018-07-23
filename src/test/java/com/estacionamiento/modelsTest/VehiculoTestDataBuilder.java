@@ -10,11 +10,13 @@ public class VehiculoTestDataBuilder {
 	private String placa;
 	private Integer cilindraje;
 	private String codigoTipoVehiculo;
+	private LocalDateTime fechaIngreso;
 	
 	public VehiculoTestDataBuilder() throws ParseException {
 		this.placa = "YRP77D";
 		this.cilindraje = 100;
 		this.codigoTipoVehiculo = "MOTO";
+		this.fechaIngreso = LocalDateTime.now();
 	}
 	
 	public VehiculoTestDataBuilder withPlaca(String placa) {
@@ -32,8 +34,13 @@ public class VehiculoTestDataBuilder {
 		return this;
 	}
 	
+	public VehiculoTestDataBuilder withFechaIngreso(LocalDateTime fechaIngreso) {
+		this.fechaIngreso = fechaIngreso;
+		return this;
+	}
+	
 	public Vehiculo build() {
-		return new Vehiculo(placa, cilindraje, codigoTipoVehiculo, false, null);
+		return new Vehiculo(placa, cilindraje, codigoTipoVehiculo, false, fechaIngreso, null);
 	}
 	
 }

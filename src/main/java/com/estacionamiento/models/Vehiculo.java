@@ -27,6 +27,10 @@ public class Vehiculo {
 	@Column(name = "estado")
 	private boolean estado;
 	
+	@NotNull
+	@Column(name = "fecha_ingreso")
+	private LocalDateTime fechaIngreso;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fk_tipo_vehiculo", insertable = false, updatable = false)
 	private TipoVehiculo tipoVehiculo;
@@ -71,12 +75,21 @@ public class Vehiculo {
 		this.estado = estado;
 	}
 
-	public Vehiculo(String placa, @NotNull Integer cilindraje, @NotNull String codigoTipoVehiculo, boolean estado, TipoVehiculo tipoVehiculo) {
+	public LocalDateTime getFechaIngreso() {
+		return fechaIngreso;
+	}
+
+	public void setFechaIngreso(LocalDateTime fechaIngreso) {
+		this.fechaIngreso = fechaIngreso;
+	}
+
+	public Vehiculo(String placa, @NotNull Integer cilindraje, @NotNull String codigoTipoVehiculo, boolean estado, LocalDateTime fechaIngreso, TipoVehiculo tipoVehiculo) {
 		super();
 		this.placa = placa;
 		this.cilindraje = cilindraje;
 		this.codigoTipoVehiculo = codigoTipoVehiculo;
 		this.estado = estado;
+		this.fechaIngreso = fechaIngreso;
 		this.tipoVehiculo = tipoVehiculo;
 	}
 
