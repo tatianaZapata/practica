@@ -45,58 +45,54 @@ public class VehiculosServiceImp implements VehiculosService {
 	private HistoricoIngresosRepository historicoIngresosRepository;
 
 	@Override
-	public Vehiculo crearVehiculo(Vehiculo vehiculo) throws Exception {
-		try {
-			validarCampos(vehiculo);
-			boolean hayCupo = verificarCapacidad(vehiculo);
-			if (!hayCupo) {
-				throw new ParqueaderoLleno("El parqueadero se encuentra lleno");
-			}
-			boolean placaIniciaPorA = verificarPlacaA(vehiculo.getPlaca());
-			if (placaIniciaPorA) {
-				boolean diaPermitido = validarDia();
-				if (!diaPermitido) {
-					throw new DiaNoPermitido("No esta autorizado a ingresar este dia");
-				}
-			}
-			
-			Optional<Vehiculo> vehiculoExistente = vehiculoRepository.findById(vehiculo.getPlaca());
-			if (vehiculoExistente.isPresent() && vehiculoExistente.get().isEstado()) {
-				throw new VehiculoYaExiste("El vehiculo ya se encuentra en el parqueadero");
-			}
-			vehiculo.setEstado(true);
-			vehiculo.setFechaIngreso(LocalDateTime.now());
-			vehiculoRepository.save(vehiculo);
-			
-			//Guardar historico
-			HistoricoIngresos historico = new HistoricoIngresos();
-			historico.setFechaIngreso(vehiculo.getFechaIngreso());
-			historico.setPlaca(vehiculo.getPlaca());
-			historicoIngresosRepository.save(historico);
-			
-			return vehiculo;
-		} catch (Exception e) {
-			throw e;
+	public Vehiculo crearVehiculo(Vehiculo vehiculo){
+		validarCampos(vehiculo);
+		boolean hayCupo = verificarCapacidad(vehiculo);
+		if (!hayCupo) {
+			throw new ParqueaderoLleno("El parqueadero se encuentra lleno");
 		}
+		boolean placaIniciaPorA = verificarPlacaA(vehiculo.getPlaca());
+		if (placaIniciaPorA) {
+			boolean diaPermitido = validarDia();
+			if (!diaPermitido) {
+				throw new DiaNoPermitido("No esta autorizado a ingresar este dia");
+			}
+		}
+		
+		Optional<Vehiculo> vehiculoExistente = vehiculoRepository.findById(vehiculo.getPlaca());
+		if (vehiculoExistente.isPresent() && vehiculoExistente.get().isEstado()) {
+			throw new VehiculoYaExiste("El vehiculo ya se encuentra en el parqueadero");
+		}
+		vehiculo.setEstado(true);
+		vehiculo.setFechaIngreso(LocalDateTime.now());
+		vehiculoRepository.save(vehiculo);
+		
+		//Guardar historico
+		HistoricoIngresos historico = new HistoricoIngresos();
+		historico.setFechaIngreso(vehiculo.getFechaIngreso());
+		historico.setPlaca(vehiculo.getPlaca());
+		historicoIngresosRepository.save(historico);
+		
+		return vehiculo;
 	}
 
 	@Override
-	public Optional<Vehiculo> consultarVehiculo(String placa) throws Exception{
+	public Optional<Vehiculo> consultarVehiculo(String placa){
 		return vehiculoRepository.findById(placa);
 	}
 
 	@Override
-	public Vehiculo modificarVehiculo(Vehiculo vehiculo) throws Exception{
+	public Vehiculo modificarVehiculo(Vehiculo vehiculo){
 		return vehiculoRepository.save(vehiculo);
 	}
 
 	@Override
-	public void eliminarVehiculo(String placa) throws Exception{
+	public void eliminarVehiculo(String placa){
 		vehiculoRepository.deleteById(placa);
 	}
 
 	@Override
-	public List<Vehiculo> listarVehidulos() throws Exception {
+	public List<Vehiculo> listarVehidulos(){
 		return vehiculoRepository.findByEstado(true);
 	}
 
@@ -138,14 +134,14 @@ public class VehiculosServiceImp implements VehiculosService {
 	}
 
 	@Override
-	public TotalAPagarDTO salirDeEstacionamiento(String placa) throws Exception {
+	public TotalAPagarDTO salirDeEstacionamiento(String placa){
 		BigDecimal totalAPagar = BigDecimal.ZERO;
 		try {
 			Optional<Vehiculo> vehiculo = vehiculoRepository.findById(placa);
 			if (!vehiculo.isPresent()) {
 				throw new VehiculoNoExiste("No existe un vehiculo con esa placa");
 			}
-			if (vehiculo.get().isEstado() == false) {
+			if (!vehiculo.get().isEstado()) {
 				throw new VehiculoNoExiste("El vehiculo no se encuentra parqueado");
 			}
 			vehiculo.get().setEstado(false);

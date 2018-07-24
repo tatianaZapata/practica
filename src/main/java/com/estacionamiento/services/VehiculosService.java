@@ -8,16 +8,16 @@ import com.estacionamiento.models.Vehiculo;
 
 public interface VehiculosService {
 	
-	Vehiculo crearVehiculo (Vehiculo vehiculo) throws Exception;
+	Vehiculo crearVehiculo (Vehiculo vehiculo);
 	
-	Optional<Vehiculo> consultarVehiculo (String placa) throws Exception;
+	Optional<Vehiculo> consultarVehiculo (String placa);
 	
-	Vehiculo modificarVehiculo (Vehiculo vehiculo) throws Exception;
+	Vehiculo modificarVehiculo (Vehiculo vehiculo);
 	
-	void eliminarVehiculo (String placa) throws Exception;
+	void eliminarVehiculo (String placa);
 	
-	List<Vehiculo> listarVehidulos () throws Exception;
+	List<Vehiculo> listarVehidulos ();
 	
-	TotalAPagarDTO salirDeEstacionamiento (String placa) throws Exception;
+	TotalAPagarDTO salirDeEstacionamiento (String placa);
 
 }
