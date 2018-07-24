@@ -24,8 +24,8 @@ public class TipoVehiculosServiceImp implements TipoVehiculosService{
 	}
 
 	@Override
-	public Optional<TipoVehiculo> consultarTipoVehiculo(String id_tipo) {
-		return tipoVehiculoRepository.findById(id_tipo);
+	public Optional<TipoVehiculo> consultarTipoVehiculo(String idTipo) {
+		return tipoVehiculoRepository.findById(idTipo);
 	}
 
 	@Override
@@ -34,8 +34,8 @@ public class TipoVehiculosServiceImp implements TipoVehiculosService{
 	}
 
 	@Override
-	public void eliminarTipoVehiculo(String id_tipo) {
-		tipoVehiculoRepository.deleteById(id_tipo);
+	public void eliminarTipoVehiculo(String idTipo) {
+		tipoVehiculoRepository.deleteById(idTipo);
 	}
 
 	@Override
