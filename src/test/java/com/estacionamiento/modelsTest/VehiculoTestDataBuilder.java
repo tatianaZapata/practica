@@ -13,7 +13,7 @@ public class VehiculoTestDataBuilder {
 	private LocalDateTime fechaIngreso;
 	
 	public VehiculoTestDataBuilder() throws ParseException {
-		this.placa = "YRP77D";
+		this.placa = "MAR555";
 		this.cilindraje = 100;
 		this.codigoTipoVehiculo = "MOTO";
 		this.fechaIngreso = LocalDateTime.now();
