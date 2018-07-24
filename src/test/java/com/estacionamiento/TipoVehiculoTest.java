@@ -1,9 +1,10 @@
 package com.estacionamiento;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import java.text.ParseException;
+import java.util.Optional;
 import javax.transaction.Transactional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,71 +14,79 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.estacionamiento.dto.TotalAPagarDTO;
+
 import com.estacionamiento.models.TipoVehiculo;
-import com.estacionamiento.models.Vehiculo;
 import com.estacionamiento.modelsTest.TipoVehiculoDataBuilder;
-import com.estacionamiento.modelsTest.VehiculoTestDataBuilder;
 import com.estacionamiento.services.TipoVehiculosServiceImp;
-import com.estacionamiento.services.VehiculosServiceImp;
 
 @SpringBootTest
 @Transactional
 @RunWith(SpringRunner.class)
 @Rollback(value=true)
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-public class VehiculoOperacionesTest {
-	
-	@Autowired
-	private VehiculosServiceImp vehiculosServiceImp;
-	
+public class TipoVehiculoTest {
+
 	@Autowired
 	private TipoVehiculosServiceImp tipoVehiculoServiceImp;
 	
 	@Test
-	public void ingresarAEstacionamiento() throws ParseException{
+	public void crearTipoVehiculo() {
 		try {
 		//Arrange
 			TipoVehiculo tipo = new TipoVehiculoDataBuilder().build();
-			Vehiculo vehiculo = new VehiculoTestDataBuilder().build();
 		//Act
 			tipoVehiculoServiceImp.crearTipoVehiculo(tipo);
-			vehiculosServiceImp.crearVehiculo(vehiculo);
 		//Assert
-			assertTrue(vehiculo.isEstado());
-		} catch (Exception e) {
+			assertNotNull(tipo);
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	@Test
-	public void salirDeEstacionamiento() {
+	public void consultarTipoVehiculo() {
 		try {
 		//Arrange
 			TipoVehiculo tipo = new TipoVehiculoDataBuilder().build();
-			Vehiculo vehiculo = new VehiculoTestDataBuilder().build();
-			TotalAPagarDTO totalDTO;
 		//Act
 			tipoVehiculoServiceImp.crearTipoVehiculo(tipo);
-			vehiculosServiceImp.crearVehiculo(vehiculo);
-			totalDTO = vehiculosServiceImp.salirDeEstacionamiento(vehiculo.getPlaca());
+			Optional<TipoVehiculo> tipoVehiculo = tipoVehiculoServiceImp.consultarTipoVehiculo(tipo.getIdTipo());
 		//Assert
-			assertNotNull(totalDTO.getTotalPagar());
-		} catch (Exception e) {
+			assertNotNull(tipoVehiculo);
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
 	@Test
-	public void vehiculoNoExiste() {
+	public void modificarTipoVehiculo() {
 		try {
 		//Arrange
-			Vehiculo vehiculo = new VehiculoTestDataBuilder().withPlaca("000000").build();
+			TipoVehiculo tipo = new TipoVehiculoDataBuilder().build();
 		//Act
-			vehiculosServiceImp.salirDeEstacionamiento(vehiculo.getPlaca());
-		} catch (Exception e) {
-			//Assert
-			assertEquals("No existe un vehiculo con esa placa", e.getMessage());
+			tipoVehiculoServiceImp.crearTipoVehiculo(tipo);
+			tipo.setDescripcion("Motocicleta");
+			TipoVehiculo tipoVehiculo = tipoVehiculoServiceImp.modificarTipoVehiculo(tipo);
+		//Assert
+			assertEquals("Motocicleta", tipoVehiculo.getDescripcion());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void eliminarTipoVehiculo() {
+		try {
+		//Arrange
+			TipoVehiculo tipo = new TipoVehiculoDataBuilder().build();
+		//Act
+			tipoVehiculoServiceImp.crearTipoVehiculo(tipo);
+			tipoVehiculoServiceImp.eliminarTipoVehiculo(tipo.getIdTipo());
+			Optional<TipoVehiculo> tipoVehiculo = tipoVehiculoServiceImp.consultarTipoVehiculo(tipo.getIdTipo());
+		//Assert
+			assertThat(!tipoVehiculo.isPresent());
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
 	}
 }

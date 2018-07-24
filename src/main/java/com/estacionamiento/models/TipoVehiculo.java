@@ -36,4 +36,14 @@ public class TipoVehiculo {
 		CARRO, MOTO
 	}
 
+	public TipoVehiculo(String idTipo, @NotNull String descripcion) {
+		super();
+		this.idTipo = idTipo;
+		this.descripcion = descripcion;
+	}
+
+	public TipoVehiculo() {
+		super();
+	}
+	
 }
