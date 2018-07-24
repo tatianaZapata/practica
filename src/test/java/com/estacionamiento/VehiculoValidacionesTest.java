@@ -21,9 +21,9 @@ import com.estacionamiento.modelsTest.VehiculoTestDataBuilder;
 import com.estacionamiento.repositories.VehiculosRepository;
 import com.estacionamiento.services.VehiculosServiceImp;
 
-@SpringBootTest
-@Transactional
-@RunWith(SpringRunner.class)
+//@SpringBootTest
+//@Transactional
+//@RunWith(SpringRunner.class)
 public class VehiculoValidacionesTest {
 	
 	@InjectMocks
