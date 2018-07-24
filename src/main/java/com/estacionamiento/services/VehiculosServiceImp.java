@@ -93,31 +93,26 @@ public class VehiculosServiceImp implements VehiculosService {
 	}
 
 	public boolean verificarCapacidad(Vehiculo vehiculo) {
-		try {
-			boolean hayCupo = false;
-			Integer quantity = 0;
+		boolean hayCupo = false;
+		Integer quantity = 0;
 
-			switch (vehiculo.getCodigoTipoVehiculo()) {
-			case "CARRO":
-				quantity = vehiculoRepository.contarPorTipoVehiculo(TipoDeVehiculo.CARRO.name());
-				if (quantity < 20)
-					hayCupo = true;
-				break;
+		switch (vehiculo.getCodigoTipoVehiculo()) {
+		case "CARRO":
+			quantity = vehiculoRepository.contarPorTipoVehiculo(TipoDeVehiculo.CARRO.name());
+			if (quantity < 20)
+				hayCupo = true;
+			break;
 
-			case "MOTO":
-				quantity = vehiculoRepository.contarPorTipoVehiculo(TipoDeVehiculo.MOTO.name());
-				if (quantity < 10)
-					hayCupo = true;
-				break;
+		case "MOTO":
+			quantity = vehiculoRepository.contarPorTipoVehiculo(TipoDeVehiculo.MOTO.name());
+			if (quantity < 10)
+				hayCupo = true;
+			break;
 
-			default:
-				break;
-			}
-			return hayCupo;
-		} catch (Exception e) {
-			LOGGER.info(" -------------------- Error en verificarCapacidad: " + e);
-			throw e;
+		default:
+			break;
 		}
+		return hayCupo;
 	}
 
 	public boolean validarDia() {

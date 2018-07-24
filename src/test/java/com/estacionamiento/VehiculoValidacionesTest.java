@@ -103,4 +103,18 @@ public class VehiculoValidacionesTest {
 			assertTrue(esPlacaA);
 	}
 	
+	@Test
+	public void parqueaderoLleno() {
+		try {
+		//Arrange
+			Vehiculo vehiculo = new VehiculoTestDataBuilder().build();
+			Mockito.when(vehiculoRepository.contarPorTipoVehiculo(vehiculo.getCodigoTipoVehiculo())).thenReturn(10);
+		//Act
+			vehiculosServiceImp.crearVehiculo(vehiculo);
+		} catch (Exception e) {
+			//Assert
+			assertEquals("El parqueadero se encuentra lleno", e.getMessage());
+		}
+	}
+	
 }
