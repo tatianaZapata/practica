@@ -94,13 +94,19 @@ public class VehiculoValidacionesTest {
 	
 	@Test
 	public void ValidarPlacaA() throws ParseException{
+		try {
 		//Arrange
 			Boolean esPlacaA;
 			Vehiculo vehiculo = new VehiculoTestDataBuilder().withPlaca("ATT77E").build();
 		//Act
 			esPlacaA = vehiculosServiceImp.verificarPlacaA(vehiculo.getPlaca());
+			vehiculosServiceImp.crearVehiculo(vehiculo);
 		//Assert
 			assertTrue(esPlacaA);
+		} catch (Exception e) {
+			//Assert
+			assertEquals("No esta autorizado a ingresar este dia", e.getMessage());
+		}
 	}
 	
 	@Test
