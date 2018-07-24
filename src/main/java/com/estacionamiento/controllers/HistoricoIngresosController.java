@@ -22,27 +22,27 @@ public class HistoricoIngresosController {
 	private HistoricoIngresosService historicoIngresosService;
 	
 	@GetMapping("/historico/{id}")
-	public Optional<HistoricoIngresos> consultarHistorico(@PathVariable Integer id) throws Exception{
+	public Optional<HistoricoIngresos> consultarHistorico(@PathVariable Integer id){
 		return historicoIngresosService.consultarHistorico(id);
 	}
 	
 	@GetMapping("/historico")
-	public List<HistoricoIngresos> listarHistorico () throws Exception{
+	public List<HistoricoIngresos> listarHistorico (){
 		return historicoIngresosService.listarHistorico();
 	}
 	
 	@PostMapping("/historico")
-	public HistoricoIngresos guardarHistorico(@RequestBody HistoricoIngresos historico) throws Exception{
+	public HistoricoIngresos guardarHistorico(@RequestBody HistoricoIngresos historico){
 		return historicoIngresosService.guardarHistorico(historico);
 	}
 	
 	@PutMapping("/historico")
-	public HistoricoIngresos modificarHistorico(@RequestBody HistoricoIngresos historico) throws Exception{
+	public HistoricoIngresos modificarHistorico(@RequestBody HistoricoIngresos historico){
 		return historicoIngresosService.modificarHistorico(historico);
 	}
 	
 	@DeleteMapping("/historico/{id}")
-	public void eliminarHistorico(@PathVariable Integer id) throws Exception{
+	public void eliminarHistorico(@PathVariable Integer id){
 		historicoIngresosService.eliminarHistorico(id);
 	}
 	

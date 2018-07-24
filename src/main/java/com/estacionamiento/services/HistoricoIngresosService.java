@@ -7,14 +7,14 @@ import com.estacionamiento.models.HistoricoIngresos;
 
 public interface HistoricoIngresosService {
 	
-	HistoricoIngresos guardarHistorico(HistoricoIngresos historico) throws Exception;
+	HistoricoIngresos guardarHistorico(HistoricoIngresos historico);
 	
-	Optional<HistoricoIngresos> consultarHistorico(Integer id) throws Exception;
+	Optional<HistoricoIngresos> consultarHistorico(Integer id);
 	
-	HistoricoIngresos modificarHistorico(HistoricoIngresos historico) throws Exception;
+	HistoricoIngresos modificarHistorico(HistoricoIngresos historico);
 	
-	void eliminarHistorico(Integer id) throws Exception;
+	void eliminarHistorico(Integer id);
 	
-	List<HistoricoIngresos> listarHistorico () throws Exception;
+	List<HistoricoIngresos> listarHistorico ();
 
 }

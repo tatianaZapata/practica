@@ -16,27 +16,27 @@ public class HistoricoIngresosServiceImp implements HistoricoIngresosService{
 	private HistoricoIngresosRepository historicoIngresosRepository;
 
 	@Override
-	public HistoricoIngresos guardarHistorico(HistoricoIngresos historico) throws Exception {
+	public HistoricoIngresos guardarHistorico(HistoricoIngresos historico){
 		return historicoIngresosRepository.save(historico);
 	}
 
 	@Override
-	public Optional<HistoricoIngresos> consultarHistorico(Integer id) throws Exception {
+	public Optional<HistoricoIngresos> consultarHistorico(Integer id){
 		return historicoIngresosRepository.findById(id);
 	}
 
 	@Override
-	public HistoricoIngresos modificarHistorico(HistoricoIngresos historico) throws Exception {
+	public HistoricoIngresos modificarHistorico(HistoricoIngresos historico){
 		return historicoIngresosRepository.save(historico);
 	}
 
 	@Override
-	public void eliminarHistorico(Integer id) throws Exception {
+	public void eliminarHistorico(Integer id){
 		historicoIngresosRepository.deleteById(id);
 	}
 
 	@Override
-	public List<HistoricoIngresos> listarHistorico() throws Exception {
+	public List<HistoricoIngresos> listarHistorico(){
 		return historicoIngresosRepository.findAll();
 	}
 	
