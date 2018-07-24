@@ -15,35 +15,35 @@ import com.estacionamiento.excepciones.VehiculoNoExiste;
 import com.estacionamiento.excepciones.VehiculoYaExiste;
 
 @ControllerAdvice
-public class HandlerException {
+public class ManejadorExcepciones {
 	
 	@ExceptionHandler({ ParqueaderoLleno.class })
 	public ResponseEntity<Object> parqueaderoLleno(Exception ex, WebRequest request) {
-		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
+		return new ResponseEntity<>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
 	}
 	
 	@ExceptionHandler({ DiaNoPermitido.class })
 	public ResponseEntity<Object> diaNoPermitido(Exception ex, WebRequest request) {
-		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
+		return new ResponseEntity<>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
 	}
 
 	@ExceptionHandler({ VehiculoYaExiste.class })
 	public ResponseEntity<Object> vehiculoYaExiste(Exception ex, WebRequest request) {
-		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
+		return new ResponseEntity<>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
 	}
 	
 	@ExceptionHandler({ VehiculoNoExiste.class })
 	public ResponseEntity<Object> vehiculoNoExiste(Exception ex, WebRequest request) {
-		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
+		return new ResponseEntity<>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
 	}
 	
 	@ExceptionHandler({ CampoObligatorio.class })
 	public ResponseEntity<Object> campoObligatorio(Exception ex, WebRequest request) {
-		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
+		return new ResponseEntity<>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
 	}
 	
 	@ExceptionHandler({ InternalException.class })
 	public ResponseEntity<Object> internalException(Exception ex, WebRequest request) {
-		return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
+		return new ResponseEntity<>(ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
 	}
 }

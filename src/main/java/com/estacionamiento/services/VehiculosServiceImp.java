@@ -9,13 +9,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.estacionamiento.constants.Constants;
 import com.estacionamiento.controllers.VehiculosController;
 import com.estacionamiento.dto.TotalAPagarDTO;
 import com.estacionamiento.excepciones.CampoObligatorio;
