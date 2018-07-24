@@ -212,8 +212,7 @@ public class VehiculosServiceImp implements VehiculosService {
 		Long minutosTranscurridos = duracion.toMinutes();
 		Double tiempoTranscurrido = minutosTranscurridos / 60D;
 		horasTranscurridas = tiempoTranscurrido.intValue();
-		boolean sumarMinutos = (tiempoTranscurrido > horasTranscurridas) ? true : false;
-		if(sumarMinutos) {
+		if(tiempoTranscurrido > horasTranscurridas) {
 			horasTranscurridas += 1;
 		}
 		return horasTranscurridas;
