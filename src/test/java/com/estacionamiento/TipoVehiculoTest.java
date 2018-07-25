@@ -62,11 +62,12 @@ public class TipoVehiculoTest {
 	public void modificarTipoVehiculo() {
 		try {
 		//Arrange
+			TipoVehiculo tipoVehiculo;
 			TipoVehiculo tipo = new TipoVehiculoDataBuilder().build();
 		//Act
 			tipoVehiculoServiceImp.crearTipoVehiculo(tipo);
 			tipo.setDescripcion("Motocicleta");
-			TipoVehiculo tipoVehiculo = tipoVehiculoServiceImp.modificarTipoVehiculo(tipo);
+			tipoVehiculo = tipoVehiculoServiceImp.modificarTipoVehiculo(tipo);
 		//Assert
 			assertEquals("Motocicleta", tipoVehiculo.getDescripcion());
 		} catch (ParseException e) {
@@ -84,7 +85,7 @@ public class TipoVehiculoTest {
 			tipoVehiculoServiceImp.eliminarTipoVehiculo(tipo.getIdTipo());
 			Optional<TipoVehiculo> tipoVehiculo = tipoVehiculoServiceImp.consultarTipoVehiculo(tipo.getIdTipo());
 		//Assert
-			assertThat(!tipoVehiculo.isPresent());
+			assertThat(!tipoVehiculo.isPresent()).isTrue();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

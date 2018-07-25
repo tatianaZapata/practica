@@ -1,9 +1,13 @@
 package com.estacionamiento;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import java.text.ParseException;
+import java.util.List;
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,18 +40,14 @@ public class VehiculoOperacionesTest {
 	
 	@Test
 	public void ingresarAEstacionamiento() throws ParseException{
-		try {
-		//Arrange
-			TipoVehiculo tipo = new TipoVehiculoDataBuilder().build();
-			Vehiculo vehiculo = new VehiculoTestDataBuilder().build();
-		//Act
-			tipoVehiculoServiceImp.crearTipoVehiculo(tipo);
-			vehiculosServiceImp.crearVehiculo(vehiculo);
-		//Assert
-			assertTrue(vehiculo.isEstado());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	//Arrange
+		TipoVehiculo tipo = new TipoVehiculoDataBuilder().build();
+		Vehiculo vehiculo = new VehiculoTestDataBuilder().build();
+	//Act
+		tipoVehiculoServiceImp.crearTipoVehiculo(tipo);
+		vehiculosServiceImp.crearVehiculo(vehiculo);
+	//Assert
+		assertTrue(vehiculo.isEstado());
 	}
 	
 	@Test
@@ -69,7 +69,7 @@ public class VehiculoOperacionesTest {
 	}
 
 	@Test
-	public void vehiculoNoExiste() {
+	public void probarSalirVehiculoQueNoExiste() {
 		try {
 		//Arrange
 			Vehiculo vehiculo = new VehiculoTestDataBuilder().withPlaca("000000").build();
@@ -78,6 +78,98 @@ public class VehiculoOperacionesTest {
 		} catch (Exception e) {
 			//Assert
 			assertEquals("No existe un vehiculo con esa placa", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void probarIngresarVehiculoPresente() {
+		try {
+		//Arrange
+			TipoVehiculo tipo = new TipoVehiculoDataBuilder().build();
+			Vehiculo vehiculo = new VehiculoTestDataBuilder().build();
+		//Act
+			tipoVehiculoServiceImp.crearTipoVehiculo(tipo);
+			vehiculosServiceImp.crearVehiculo(vehiculo);
+			vehiculosServiceImp.crearVehiculo(vehiculo);
+		} catch (Exception e) {
+			//Assert
+			assertEquals("El vehiculo ya se encuentra en el parqueadero", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void probarConsultarVehiculo() {
+		try {
+		//Arrange
+			Optional<Vehiculo> vehiculoConsultado = null;
+			TipoVehiculo tipo = new TipoVehiculoDataBuilder().build();
+			Vehiculo vehiculo = new VehiculoTestDataBuilder().build();
+		//Act
+			tipoVehiculoServiceImp.crearTipoVehiculo(tipo);
+			vehiculosServiceImp.crearVehiculo(vehiculo);
+			vehiculoConsultado = vehiculosServiceImp.consultarVehiculo(vehiculo.getPlaca());
+		//Assert
+			assertNotNull(vehiculoConsultado);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void probarModificarVehiculo() {
+		try {
+		//Arrange
+			Vehiculo vehiculoModificado;
+			TipoVehiculo tipo = new TipoVehiculoDataBuilder().build();
+			Vehiculo vehiculo = new VehiculoTestDataBuilder().build();
+		//Act
+			tipoVehiculoServiceImp.crearTipoVehiculo(tipo);
+			vehiculosServiceImp.crearVehiculo(vehiculo);
+			vehiculo.setCodigoTipoVehiculo("CARRO");
+			vehiculoModificado = vehiculosServiceImp.modificarVehiculo(vehiculo);
+		//Assert
+			assertEquals("CARRO", vehiculoModificado.getCodigoTipoVehiculo());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void probarEliminarVehiculo() {
+		try {
+		//Arrange
+			Optional<Vehiculo> vehiculoConsultado;
+			TipoVehiculo tipo = new TipoVehiculoDataBuilder().build();
+			Vehiculo vehiculo = new VehiculoTestDataBuilder().build();
+		//Act
+			tipoVehiculoServiceImp.crearTipoVehiculo(tipo);
+			vehiculosServiceImp.crearVehiculo(vehiculo);
+			vehiculosServiceImp.eliminarVehiculo(vehiculo.getPlaca());
+			vehiculoConsultado = vehiculosServiceImp.consultarVehiculo(vehiculo.getPlaca());
+		//Assert
+			assertThat(!vehiculoConsultado.isPresent()).isTrue();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void probarListarVehiculo() {
+		try {
+		//Arrange
+			List<Vehiculo> listaVehiculos;
+			TipoVehiculo tipo = new TipoVehiculoDataBuilder().build();
+			Vehiculo vehiculo1 = new VehiculoTestDataBuilder().build();
+			Vehiculo vehiculo2 = new VehiculoTestDataBuilder().withPlaca("TRE441").build();
+		//Act
+			tipoVehiculoServiceImp.crearTipoVehiculo(tipo);
+			vehiculosServiceImp.crearVehiculo(vehiculo1);
+			vehiculosServiceImp.crearVehiculo(vehiculo2);
+			listaVehiculos = vehiculosServiceImp.listarVehidulos();
+		//Assert
+			assertEquals(2, listaVehiculos.size());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

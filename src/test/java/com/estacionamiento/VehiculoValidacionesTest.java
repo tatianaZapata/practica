@@ -30,7 +30,7 @@ public class VehiculoValidacionesTest {
 	}
 
 	@Test
-	public void ProbarParqueaderoSinEspacioParaCarros() throws ParseException{
+	public void probarParqueaderoSinEspacioParaCarros() throws ParseException{
 		//Arrange
 			boolean hayCapacidad;
 			Vehiculo vehiculo = new VehiculoTestDataBuilder().withCodigoTipoVehiculo("CARRO").build();
@@ -42,7 +42,7 @@ public class VehiculoValidacionesTest {
 	}
 	
 	@Test
-	public void ProbarParqueaderoConEspacioParaCarros() throws ParseException{
+	public void probarParqueaderoConEspacioParaCarros() throws ParseException{
 		//Arrange
 			boolean hayCapacidad;
 			Vehiculo vehiculo = new VehiculoTestDataBuilder().withCodigoTipoVehiculo("CARRO").build();
@@ -54,7 +54,7 @@ public class VehiculoValidacionesTest {
 	}
 	
 	@Test
-	public void ProbarParqueaderoSinEspacioParaMotos() throws ParseException{
+	public void probarParqueaderoSinEspacioParaMotos() throws ParseException{
 		//Arrange
 			boolean hayCapacidad;
 			Vehiculo vehiculo = new VehiculoTestDataBuilder().withCodigoTipoVehiculo("MOTO").build();
@@ -66,7 +66,7 @@ public class VehiculoValidacionesTest {
 	}
 	
 	@Test
-	public void ProbarParqueaderoConEspacioParaMotos() throws ParseException{
+	public void probarParqueaderoConEspacioParaMotos() throws ParseException{
 		//Arrange
 			boolean hayCapacidad;
 			Vehiculo vehiculo = new VehiculoTestDataBuilder().withCodigoTipoVehiculo("MOTO").build();
@@ -78,7 +78,7 @@ public class VehiculoValidacionesTest {
 	}
 	
 	@Test
-	public void ProbarDiaPermitido() throws ParseException{
+	public void probarDiaPermitido() throws ParseException{
 		//Arrange
 			boolean diaPermitidoMetodo;
 			boolean diaPermitido = false;
@@ -93,7 +93,7 @@ public class VehiculoValidacionesTest {
 	}
 	
 	@Test
-	public void ValidarPlacaA() throws ParseException{
+	public void validarPlacaA() throws ParseException{
 		try {
 		//Arrange
 			Boolean esPlacaA;
@@ -110,7 +110,7 @@ public class VehiculoValidacionesTest {
 	}
 	
 	@Test
-	public void parqueaderoLleno() {
+	public void probarParqueaderoLleno() {
 		try {
 		//Arrange
 			Vehiculo vehiculo = new VehiculoTestDataBuilder().build();
