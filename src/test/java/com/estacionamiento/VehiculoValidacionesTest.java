@@ -1,6 +1,7 @@
 package com.estacionamiento;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
@@ -189,6 +190,17 @@ public class VehiculoValidacionesTest {
 	//Assert
 		assertEquals(new BigDecimal(500), precioMoto.getValorHora());
 		assertEquals(new BigDecimal(4000), precioMoto.getValorDia());
+	}
+	
+	@Test
+	public void probarPrecioConVehiculoQueNoExiste() {
+	//Arrange
+		Precio precio;
+		PrecioFabrica fabrica = new PrecioFabrica();
+	//Act
+		precio = fabrica.getPrecio("BICICLETA");
+	//Assert
+		assertNull(precio);
 	}
 	
 }
