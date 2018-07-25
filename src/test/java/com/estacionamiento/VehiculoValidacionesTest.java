@@ -2,6 +2,8 @@ package com.estacionamiento;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -11,8 +13,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
+import com.estacionamiento.factory.PrecioFabrica;
 import com.estacionamiento.models.Vehiculo;
 import com.estacionamiento.modelsTest.VehiculoTestDataBuilder;
+import com.estacionamiento.precios.Precio;
 import com.estacionamiento.repositories.VehiculosRepository;
 import com.estacionamiento.services.VehiculosServiceImp;
 
@@ -160,6 +165,30 @@ public class VehiculoValidacionesTest {
 			//Assert
 			assertEquals("El tipo de vehiculo es obligatorio", e.getMessage());
 		}
+	}
+	
+	@Test
+	public void probarPrecioCarro() {
+	//Arrange
+		Precio precioCarro;
+		PrecioFabrica fabrica = new PrecioFabrica();
+	//Act
+		precioCarro = fabrica.getPrecio("CARRO");
+	//Assert
+		assertEquals(new BigDecimal(1000), precioCarro.getValorHora());
+		assertEquals(new BigDecimal(8000), precioCarro.getValorDia());
+	}
+	
+	@Test
+	public void probarPrecioMoto() {
+	//Arrange
+		Precio precioMoto;
+		PrecioFabrica fabrica = new PrecioFabrica();
+	//Act
+		precioMoto = fabrica.getPrecio("MOTO");
+	//Assert
+		assertEquals(new BigDecimal(500), precioMoto.getValorHora());
+		assertEquals(new BigDecimal(4000), precioMoto.getValorDia());
 	}
 	
 }
