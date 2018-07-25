@@ -77,7 +77,7 @@ public class VehiculoOperacionesTest {
 			vehiculosServiceImp.salirDeEstacionamiento(vehiculo.getPlaca());
 		} catch (Exception e) {
 			//Assert
-			assertEquals("No existe un vehiculo con esa placa", e.getMessage());
+			assertEquals("El vehiculo no se encuentra en el parqueadero", e.getMessage());
 		}
 	}
 	

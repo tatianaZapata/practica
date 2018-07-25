@@ -129,14 +129,10 @@ public class VehiculosServiceImp implements VehiculosService {
 		BigDecimal totalAPagar = BigDecimal.ZERO;
 		try {
 			Optional<Vehiculo> vehiculo = vehiculoRepository.findById(placa);
-			if (!vehiculo.isPresent()) {
-				throw new VehiculoNoExiste("No existe un vehiculo con esa placa");
-			}
-			if (!vehiculo.get().isEstado()) {
-				throw new VehiculoNoExiste("El vehiculo no se encuentra parqueado");
+			if (!vehiculo.isPresent() || !vehiculo.get().isEstado()) {
+				throw new VehiculoNoExiste("El vehiculo no se encuentra en el parqueadero");
 			}
 			vehiculo.get().setEstado(false);
-			
 			// Actualizar historico
 			HistoricoIngresos historico = historicoIngresosRepository
 					.findTop1ByPlacaOrderByFechaIngresoDesc(vehiculo.get().getPlaca())

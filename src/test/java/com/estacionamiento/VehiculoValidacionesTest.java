@@ -123,4 +123,43 @@ public class VehiculoValidacionesTest {
 		}
 	}
 	
+	@Test
+	public void probarPlacaObligatoria(){
+		try {
+		//Arrange
+			Vehiculo vehiculo = new VehiculoTestDataBuilder().withPlaca(null).build();
+		//Act
+			vehiculosServiceImp.validarCampos(vehiculo);
+		} catch (Exception e) {
+			//Assert
+			assertEquals("La placa del vehiculo es obligatoria", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void probarCilindrajeObligatorio(){
+		try {
+		//Arrange
+			Vehiculo vehiculo = new VehiculoTestDataBuilder().withCilindraje(null).build();
+		//Act
+			vehiculosServiceImp.validarCampos(vehiculo);
+		} catch (Exception e) {
+			//Assert
+			assertEquals("El cilindraje del vehiculo es obligatorio", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void probarTipoVehiculoObligatorio(){
+		try {
+		//Arrange
+			Vehiculo vehiculo = new VehiculoTestDataBuilder().withCodigoTipoVehiculo(null).build();
+		//Act
+			vehiculosServiceImp.validarCampos(vehiculo);
+		} catch (Exception e) {
+			//Assert
+			assertEquals("El tipo de vehiculo es obligatorio", e.getMessage());
+		}
+	}
+	
 }
