@@ -3,10 +3,9 @@ package com.estacionamiento;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
+import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
 import com.estacionamiento.factory.PrecioFabrica;
 import com.estacionamiento.models.Vehiculo;
 import com.estacionamiento.modelsTest.VehiculoTestDataBuilder;
@@ -26,6 +24,8 @@ public class VehiculoValidacionesTest {
 	
 	@InjectMocks
 	private VehiculosServiceImp vehiculosServiceImp;
+	
+	private VehiculosServiceImp vehiculosServiceImpSpy = Mockito.spy(VehiculosServiceImp.class);
 	
 	@Mock
 	private VehiculosRepository vehiculoRepository;
@@ -87,13 +87,18 @@ public class VehiculoValidacionesTest {
 	public void probarDiaPermitido() throws ParseException{
 		//Arrange
 			boolean diaPermitidoMetodo;
-			boolean diaPermitido = false;
-			DayOfWeek diaSemana = LocalDate.now().getDayOfWeek();
-			if (diaSemana.equals(DayOfWeek.SUNDAY) || diaSemana.equals(DayOfWeek.MONDAY)) {
-				diaPermitido = true;
-			}
+			boolean diaPermitido = true;
+			
+			LocalDate fecha = LocalDate.now().withDayOfMonth(16);
+			
+			when(vehiculosServiceImpSpy.getFechaActual()).thenReturn(fecha);
+			
+//			DayOfWeek diaSemana = LocalDate.now().getDayOfWeek();
+//			if (diaSemana.equals(DayOfWeek.SUNDAY) || diaSemana.equals(DayOfWeek.MONDAY)) {
+//				diaPermitido = true;
+//			}
 		//Act
-			diaPermitidoMetodo = vehiculosServiceImp.validarDia();
+			diaPermitidoMetodo = vehiculosServiceImpSpy.validarDia();
 		//Assert
 			assertEquals(diaPermitido, diaPermitidoMetodo);
 	}

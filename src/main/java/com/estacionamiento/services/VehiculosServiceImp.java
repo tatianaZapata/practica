@@ -117,11 +117,15 @@ public class VehiculosServiceImp implements VehiculosService {
 
 	public boolean validarDia() {
 		boolean diaValido = false;
-		DayOfWeek diaSemana = LocalDate.now().getDayOfWeek();
-		if (diaSemana.equals(DayOfWeek.SUNDAY) || diaSemana.equals(DayOfWeek.MONDAY)) {
+		LocalDate fechaActual = getFechaActual();
+		if (fechaActual.getDayOfWeek().equals(DayOfWeek.SUNDAY) || fechaActual.getDayOfWeek().equals(DayOfWeek.MONDAY)) {
 			diaValido = true;
 		}
 		return diaValido;
+	}
+
+	public LocalDate getFechaActual() {
+		return LocalDate.now();
 	}
 
 	@Override
